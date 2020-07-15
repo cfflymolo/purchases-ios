@@ -58,6 +58,7 @@
 @property (nonatomic) RCDeviceCache *deviceCache;
 @property (nonatomic) RCIdentityManager *identityManager;
 @property (nonatomic) RCSystemInfo *systemInfo;
+@property (nonatomic) IntroEligibilityCalculator *introEligibilityCalculator;
 
 @end
 
@@ -229,7 +230,8 @@ static BOOL _automaticAppleSearchAdsAttributionCollection = NO;
     RCSubscriberAttributesManager *subscriberAttributesManager =
         [[RCSubscriberAttributesManager alloc] initWithBackend:backend
                                                    deviceCache:deviceCache];
-
+    IntroEligibilityCalculator *introCalculator = [[IntroEligibilityCalculator alloc] init];
+    
     return [self initWithAppUserID:appUserID
                     requestFetcher:fetcher
                     receiptFetcher:receiptFetcher
@@ -242,7 +244,8 @@ static BOOL _automaticAppleSearchAdsAttributionCollection = NO;
                   offeringsFactory:offeringsFactory
                        deviceCache:deviceCache
                    identityManager:identityManager
-       subscriberAttributesManager:subscriberAttributesManager];
+       subscriberAttributesManager:subscriberAttributesManager
+        introEligibilityCalculator:introCalculator];
 }
 
 - (instancetype)initWithAppUserID:(nullable NSString *)appUserID
@@ -258,6 +261,7 @@ static BOOL _automaticAppleSearchAdsAttributionCollection = NO;
                       deviceCache:(RCDeviceCache *)deviceCache
                   identityManager:(RCIdentityManager *)identityManager
       subscriberAttributesManager:(RCSubscriberAttributesManager *)subscriberAttributesManager
+       introEligibilityCalculator:(IntroEligibilityCalculator *)introEligibilityCalculator
 {
     if (self = [super init]) {
         RCDebugLog(@"Debug logging enabled.");
@@ -282,6 +286,7 @@ static BOOL _automaticAppleSearchAdsAttributionCollection = NO;
 
         self.systemInfo = systemInfo;
         self.subscriberAttributesManager = subscriberAttributesManager;
+        self.introEligibilityCalculator = introEligibilityCalculator;
 
         RCReceivePurchaserInfoBlock callDelegate = ^void(RCPurchaserInfo *info, NSError *error) {
             if (info) {
@@ -678,12 +683,11 @@ static BOOL _automaticAppleSearchAdsAttributionCollection = NO;
 {
     [self receiptData:^(NSData * _Nonnull data) {
         if (@available(iOS 12.0, *)) {
-            IntroEligibilityCalculator *introCalculator = [[IntroEligibilityCalculator alloc] init];
             NSSet *productIdentifiersSet = [[NSSet alloc] initWithArray:productIdentifiers];
-            [introCalculator checkTrialOrIntroductoryPriceEligibilityWithData:data
-                                                           productIdentifiers:productIdentifiersSet
-                                                                   completion:^(NSDictionary<NSString *, NSNumber *> * _Nonnull receivedEligibility,
-                                                                                NSError * _Nullable error) {
+            [self.introEligibilityCalculator checkTrialOrIntroductoryPriceEligibilityWithData:data
+                                                                           productIdentifiers:productIdentifiersSet
+                                                                                   completion:^(NSDictionary<NSString *, NSNumber *> * _Nonnull receivedEligibility,
+                                                                                                NSError * _Nullable error) {
                 if (!error) {
                     NSMutableDictionary<NSString *, RCIntroEligibility *> *convertedEligibility = [[NSMutableDictionary alloc] init];
                     
