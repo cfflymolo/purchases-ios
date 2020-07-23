@@ -16,11 +16,18 @@ class LocalReceiptParserTests: XCTestCase {
         let receiptData = sampleReceiptData()
         do {
             let parsedReceipt = try InAppReceipt(receiptData: receiptData)
+            
             print(parsedReceipt)
         }
         catch let error {
             fatalError("couldn't parse receipt. error: \(error.localizedDescription)")
         }
+    }
+    
+    func testParseReceiptWithCustomReceiptParser() {
+        let receiptData = sampleReceiptData()
+        
+        PKCS7Extractor().extract(from: receiptData)
     }
 }
 
