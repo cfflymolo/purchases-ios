@@ -10,18 +10,50 @@ import Foundation
 
 struct PKCS7Extractor {
     func extract(from data: Data) {
+        var currentIndex = 0
         let intData = [UInt8](data)
+        
         print(intData)
-        let firstByte = intData.first!
+        let firstByte = intData[currentIndex]
         let foundClass = self.extractClass(byte: firstByte)
         print(foundClass)
         let type = extractType(byte: firstByte)
         print(type)
         let encodingType = extractEncodingType(byte: firstByte)
         print(encodingType)
+        currentIndex += 1
+        
         
         let length = extractLength(data: Array(intData.dropFirst()))
         print(length)
+        
+        currentIndex += length.totalBytes
+        print(currentIndex)
+        
+        let asn1Container = ASN1Container(containerClass: foundClass,
+                                          containerType: type,
+                                          encodingType: encodingType,
+                                          length: length.value,
+                                          payload: Array(intData.suffix(from: currentIndex).prefix(Int(length.value))))
+        print(asn1Container)
+        
+        currentIndex = 0
+        
+        let internalContainerClass = extractClass(byte: asn1Container.payload.first!)
+        let internalContainerType = extractType(byte: asn1Container.payload.first!)
+        let internalEncodingType = extractEncodingType(byte: asn1Container.payload.first!)
+        currentIndex += 1
+        let internalLength = extractLength(data: Array(asn1Container.payload.suffix(from: currentIndex)))
+        
+        currentIndex += internalLength.totalBytes
+        let internalPayload = Array(intData.suffix(from: currentIndex).prefix(Int(internalLength.value)))
+        
+        let internalContainer = ASN1Container(containerClass: internalContainerClass,
+                                              containerType: internalContainerType,
+                                              encodingType: internalEncodingType,
+                                              length: internalLength.value,
+                                              payload: internalPayload)
+        print(internalContainer)
     }
     
     func extractClass(byte: UInt8) -> ASN1Class {
@@ -39,7 +71,7 @@ struct PKCS7Extractor {
         return ASN1Type(rawValue: lastFiveBits)!
     }
     
-    func extractLength(data: [UInt8]) -> UInt {
+    func extractLength(data: [UInt8]) -> ASN1Length {
         let firstByte = data.first!
         let lengthBit = firstByte.bitAtIndex(0)
         let isShortLength = lengthBit == 0
@@ -47,11 +79,12 @@ struct PKCS7Extractor {
         let firstByteValue = UInt(firstByte.valueInRange(from: 1, to: 7))
         
         if isShortLength {
-            return firstByteValue
+            return ASN1Length(value: UInt(firstByte), totalBytes: 1)
         } else {
             let totalLengthOctets = Int(firstByteValue)
             let byteArray = Array(data.dropFirst().prefix(totalLengthOctets))
-            return bytesToUInt(byteArray: byteArray)
+            let lengthValue = bytesToUInt(byteArray: byteArray)
+            return ASN1Length(value: lengthValue, totalBytes: totalLengthOctets + 1)
         }
     }
     
@@ -64,6 +97,14 @@ struct PKCS7Extractor {
         }
         return result
     }
+}
+
+struct ASN1Container {
+    let containerClass: ASN1Class
+    let containerType: ASN1Type
+    let encodingType: ASN1EncodingType
+    let length: UInt
+    let payload: [UInt8]
 }
 
 enum ASN1Class: UInt8 {
@@ -106,9 +147,9 @@ enum ASN1EncodingType: UInt8 {
     case primitive, constructed
 }
 
-enum ASN1Length {
-    case short(value: Int)
-    case long(length: Int, value: Int)
+struct ASN1Length {
+    let value: UInt
+    let totalBytes: Int
 }
 
 extension UInt8 {
