@@ -13,6 +13,7 @@ struct PKCS7Extractor {
         let intData = [UInt8](data)
         
         let asn1Container = ASN1Container(payload: ArraySlice(intData))
+        print("asn1Container: \(asn1Container)")
     }
 }
 
@@ -21,7 +22,7 @@ struct ASN1Container {
     let containerType: ASN1Type
     let encodingType: ASN1EncodingType
     let length: ASN1Length
-    let internalPayload: ArraySlice<UInt8>?
+    let internalPayload: ArraySlice<UInt8>
     let identifierTotalBytes = 1
     var totalBytes: Int { return identifierTotalBytes + Int(length.value) + length.totalBytes }
     var internalContainers: [ASN1Container] = []
