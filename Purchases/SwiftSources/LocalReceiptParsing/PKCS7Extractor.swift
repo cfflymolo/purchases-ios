@@ -13,66 +13,55 @@ struct PKCS7Extractor {
         var currentIndex = 0
         let intData = [UInt8](data)
         
-        print(intData)
-        let firstByte = intData[currentIndex]
-        let foundClass = self.extractClass(byte: firstByte)
-        print(foundClass)
-        let type = extractType(byte: firstByte)
-        print(type)
-        let encodingType = extractEncodingType(byte: firstByte)
-        print(encodingType)
-        currentIndex += 1
-        
-        
-        let length = extractLength(data: Array(intData.dropFirst()))
-        print(length)
-        
-        currentIndex += length.totalBytes
-        print(currentIndex)
-        
-        let asn1Container = ASN1Container(containerClass: foundClass,
-                                          containerType: type,
-                                          encodingType: encodingType,
-                                          length: length.value,
-                                          payload: Array(intData.suffix(from: currentIndex).prefix(Int(length.value))))
+        let asn1Container = ASN1Container(payload: ArraySlice(intData))
         print(asn1Container)
         
         currentIndex = 0
+        guard let internalPayload = asn1Container.internalPayload else { fatalError() }
         
-        let internalContainerClass = extractClass(byte: asn1Container.payload.first!)
-        let internalContainerType = extractType(byte: asn1Container.payload.first!)
-        let internalEncodingType = extractEncodingType(byte: asn1Container.payload.first!)
-        currentIndex += 1
-        let internalLength = extractLength(data: Array(asn1Container.payload.suffix(from: currentIndex)))
-        
-        currentIndex += internalLength.totalBytes
-        let internalPayload = Array(intData.suffix(from: currentIndex).prefix(Int(internalLength.value)))
-        
-        let internalContainer = ASN1Container(containerClass: internalContainerClass,
-                                              containerType: internalContainerType,
-                                              encodingType: internalEncodingType,
-                                              length: internalLength.value,
-                                              payload: internalPayload)
+        let internalContainer = ASN1Container(payload: internalPayload)
         print(internalContainer)
     }
+}
+
+struct ASN1Container {
+    let containerClass: ASN1Class
+    let containerType: ASN1Type
+    let encodingType: ASN1EncodingType
+    let length: ASN1Length
+    let internalPayload: ArraySlice<UInt8>?
+    let identifierTotalBytes = 1
     
-    func extractClass(byte: UInt8) -> ASN1Class {
+    init(payload: ArraySlice<UInt8>) {
+        guard payload.count > 2,
+              let firstByte = payload.first else { fatalError("data format invalid") }
+        self.containerClass = ASN1Container.extractClass(byte: firstByte)
+        self.encodingType = ASN1Container.extractEncodingType(byte: firstByte)
+        self.containerType = ASN1Container.extractType(byte: firstByte)
+        self.length = ASN1Container.extractLength(data: payload.dropFirst())
+        self.internalPayload = payload.dropFirst(identifierTotalBytes + length.totalBytes).prefix(Int(length.value))
+    }
+    
+    
+    static func extractClass(byte: UInt8) -> ASN1Class {
         let firstTwoBits = byte.valueInRange(from: 0, to: 1)
         return ASN1Class(rawValue: firstTwoBits)!
     }
     
-    func extractEncodingType(byte: UInt8) -> ASN1EncodingType {
+    static func extractEncodingType(byte: UInt8) -> ASN1EncodingType {
         let thirdBit = byte.bitAtIndex(2)
         return ASN1EncodingType(rawValue: thirdBit)!
     }
     
-    func extractType(byte: UInt8) -> ASN1Type {
+    static func extractType(byte: UInt8) -> ASN1Type {
         let lastFiveBits = byte.valueInRange(from: 3, to: 7)
         return ASN1Type(rawValue: lastFiveBits)!
     }
     
-    func extractLength(data: [UInt8]) -> ASN1Length {
-        let firstByte = data.first!
+    static func extractLength(data: ArraySlice<UInt8>) -> ASN1Length {
+        guard data.count > 2,
+              let firstByte = data.first else { fatalError("data format invalid") }
+
         let lengthBit = firstByte.bitAtIndex(0)
         let isShortLength = lengthBit == 0
         
@@ -87,15 +76,6 @@ struct PKCS7Extractor {
             return ASN1Length(value: lengthValue, totalBytes: totalLengthOctets + 1)
         }
     }
-    
-}
-
-struct ASN1Container {
-    let containerClass: ASN1Class
-    let containerType: ASN1Type
-    let encodingType: ASN1EncodingType
-    let length: UInt
-    let payload: [UInt8]
 }
 
 enum ASN1Class: UInt8 {
