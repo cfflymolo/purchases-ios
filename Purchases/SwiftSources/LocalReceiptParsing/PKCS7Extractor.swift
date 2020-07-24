@@ -83,20 +83,11 @@ struct PKCS7Extractor {
         } else {
             let totalLengthOctets = Int(firstByteValue)
             let byteArray = Array(data.dropFirst().prefix(totalLengthOctets))
-            let lengthValue = bytesToUInt(byteArray: byteArray)
+            let lengthValue = byteArray.toUInt()
             return ASN1Length(value: lengthValue, totalBytes: totalLengthOctets + 1)
         }
     }
     
-    
-    func bytesToUInt(byteArray: [UInt8]) -> UInt {
-        var result: UInt = 0
-        for idx in 0..<(byteArray.count) {
-            let shiftAmount = UInt((byteArray.count) - idx - 1) * 8
-            result += UInt(byteArray[idx]) << shiftAmount
-        }
-        return result
-    }
 }
 
 struct ASN1Container {
@@ -152,37 +143,3 @@ struct ASN1Length {
     let totalBytes: Int
 }
 
-extension UInt8 {
-    func bitAtIndex(_ index: UInt8) -> UInt8 {
-        guard 0 <= index && index <= 7 else { fatalError("invalid index: \(index)") }
-        let shifted = self >> (7 - index)
-        return shifted & 0b1
-    }
-    
-    func valueInRange(from: UInt8, to: UInt8) -> UInt8 {
-        guard 0 <= from && from <= 7 else { fatalError("invalid index: \(from)") }
-        guard 0 <= to && to <= 7 else { fatalError("invalid index: \(to)") }
-        guard from <= to else { fatalError("from: \(from) can't be greater than to: \(to)") }
-        
-        let range: UInt8 = to - from + 1
-        let shifted = self >> (7 - to)
-        let mask = maskForRange(range)
-        return shifted & mask
-    }
-    
-    func maskForRange(_ range: UInt8) -> UInt8 {
-        guard 0 <= range && range <= 8 else { fatalError("range must be between 1 and 8") }
-        switch range {
-        case 1: return 0b1
-        case 2: return 0b11
-        case 3: return 0b111
-        case 4: return 0b1111
-        case 5: return 0b11111
-        case 6: return 0b111111
-        case 7: return 0b1111111
-        case 8: return 0b11111111
-        default:
-            fatalError("unhandled range")
-        }
-    }
-}
