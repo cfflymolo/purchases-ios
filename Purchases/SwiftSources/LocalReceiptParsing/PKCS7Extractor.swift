@@ -24,27 +24,24 @@ struct ASN1Container {
     let internalPayload: ArraySlice<UInt8>?
     let identifierTotalBytes = 1
     var totalBytes: Int { return identifierTotalBytes + Int(length.value) + length.totalBytes }
+    var internalContainers: [ASN1Container] = []
     
     init(payload: ArraySlice<UInt8>) {
-        guard payload.count > 2,
+        guard payload.count >= 2,
               let firstByte = payload.first else { fatalError("data format invalid") }
         self.containerClass = ASN1Container.extractClass(byte: firstByte)
         self.encodingType = ASN1Container.extractEncodingType(byte: firstByte)
         self.containerType = ASN1Container.extractType(byte: firstByte)
         self.length = ASN1Container.extractLength(data: payload.dropFirst())
         self.internalPayload = payload.dropFirst(identifierTotalBytes + length.totalBytes).prefix(Int(length.value))
-        
-        if containerType == .sequence {
-            var currentIndex = 0
+        if encodingType == .constructed {
             guard var currentPayload = internalPayload else { fatalError() }
-            while (currentIndex < currentPayload.count) {
-                print("internal container")
+            while (currentPayload.count > 0) {
                 let internalContainer = ASN1Container(payload: currentPayload)
-                currentIndex += internalContainer.totalBytes
-                currentPayload = currentPayload.dropFirst(currentIndex)
+                internalContainers.append(internalContainer)
+                currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
             }
         }
-        print(self)
     }
     
     
@@ -64,8 +61,7 @@ struct ASN1Container {
     }
     
     static func extractLength(data: ArraySlice<UInt8>) -> ASN1Length {
-        guard data.count > 2,
-              let firstByte = data.first else { fatalError("data format invalid") }
+        guard let firstByte = data.first else { fatalError("data format invalid") }
 
         let lengthBit = firstByte.bitAtIndex(0)
         let isShortLength = lengthBit == 0
