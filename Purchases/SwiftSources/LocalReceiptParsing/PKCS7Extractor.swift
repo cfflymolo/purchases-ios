@@ -10,17 +10,9 @@ import Foundation
 
 struct PKCS7Extractor {
     func extract(from data: Data) {
-        var currentIndex = 0
         let intData = [UInt8](data)
         
         let asn1Container = ASN1Container(payload: ArraySlice(intData))
-        print(asn1Container)
-        
-        currentIndex = 0
-        guard let internalPayload = asn1Container.internalPayload else { fatalError() }
-        
-        let internalContainer = ASN1Container(payload: internalPayload)
-        print(internalContainer)
     }
 }
 
@@ -31,6 +23,7 @@ struct ASN1Container {
     let length: ASN1Length
     let internalPayload: ArraySlice<UInt8>?
     let identifierTotalBytes = 1
+    var totalBytes: Int { return identifierTotalBytes + Int(length.value) + length.totalBytes }
     
     init(payload: ArraySlice<UInt8>) {
         guard payload.count > 2,
@@ -40,6 +33,18 @@ struct ASN1Container {
         self.containerType = ASN1Container.extractType(byte: firstByte)
         self.length = ASN1Container.extractLength(data: payload.dropFirst())
         self.internalPayload = payload.dropFirst(identifierTotalBytes + length.totalBytes).prefix(Int(length.value))
+        
+        if containerType == .sequence {
+            var currentIndex = 0
+            guard var currentPayload = internalPayload else { fatalError() }
+            while (currentIndex < currentPayload.count) {
+                print("internal container")
+                let internalContainer = ASN1Container(payload: currentPayload)
+                currentIndex += internalContainer.totalBytes
+                currentPayload = currentPayload.dropFirst(currentIndex)
+            }
+        }
+        print(self)
     }
     
     
