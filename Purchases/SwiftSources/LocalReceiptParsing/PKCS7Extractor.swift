@@ -88,13 +88,19 @@ struct ASN1Container {
         switch type {
         case .opaqueValue:
             return "opaqueValue"
+        case .sha1Hash:
+            return "sha1Hash"
         case .applicationVersion,
              .originalApplicationVersion,
              .bundleId:
             let internalContainer = ASN1Container(payload: container.internalPayload)
             return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
-        default:
-            return "unhandled value for type: \(type), valueType: \(container.containerType)"
+        case .creationDate,
+             .expirationDate:
+            let internalContainer = ASN1Container(payload: container.internalPayload)
+            return String(bytes: internalContainer.internalPayload, encoding: .ascii)!
+        case .inApp:
+            return "in app!"
         }
     }
     
