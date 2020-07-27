@@ -70,11 +70,35 @@ struct ASN1Container {
         let versionContainer = container.internalContainers[1]
         let valueContainer = container.internalContainers[2]
         let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
-        print("found type: \(String(describing: attributeType))")
+        let version = Array(versionContainer.internalPayload).toUInt()
+        guard let nonOptionalType = attributeType else {
+            print("skipping attribute")
+            return
+        }
         
-//        print("found version: \(versionContainer)")
-//        print("found value: \(valueContainer)")
+        print("found type: \(nonOptionalType)")
+        print("found version: \(version)")
+
+        let value = ASN1Container.extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
+        print("found value: \(value)")
     }
+    
+    static func extractReceiptAttributeValue(fromContainer container: ASN1Container,
+                                             withType type: ReceiptAttributeType) -> Any {
+        switch type {
+        case .opaqueValue:
+            return "opaqueValue"
+        case .applicationVersion,
+             .originalApplicationVersion,
+             .bundleId:
+            let internalContainer = ASN1Container(payload: container.internalPayload)
+            return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
+        default:
+            return "unhandled value for type: \(type), valueType: \(container.containerType)"
+        }
+    }
+    
+    
     
     static func extractObjectIdentifier(payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier {
         // todo: parse according to https://docs.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier
