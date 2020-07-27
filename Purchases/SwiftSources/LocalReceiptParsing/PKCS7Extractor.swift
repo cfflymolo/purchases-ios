@@ -72,39 +72,82 @@ struct ASN1Container {
         let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
         let version = Array(versionContainer.internalPayload).toUInt()
         guard let nonOptionalType = attributeType else {
-            print("skipping attribute")
+            print("skipping in app attribute")
             return
         }
         
-        print("found type: \(nonOptionalType)")
-        print("found version: \(version)")
+//        print("found type: \(nonOptionalType)")
+//        print("found version: \(version)")
 
-        let value = ASN1Container.extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
-        print("found value: \(value)")
+        ASN1Container.extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
+//        print("found value: \(value)")
     }
     
     static func extractReceiptAttributeValue(fromContainer container: ASN1Container,
-                                             withType type: ReceiptAttributeType) -> Any {
+                                             withType type: ReceiptAttributeType) {
         switch type {
         case .opaqueValue:
-            return "opaqueValue"
+            print("opaqueValue")
         case .sha1Hash:
-            return "sha1Hash"
+            print("sha1Hash")
         case .applicationVersion,
              .originalApplicationVersion,
              .bundleId:
             let internalContainer = ASN1Container(payload: container.internalPayload)
-            return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
+            print(String(bytes: internalContainer.internalPayload, encoding: .utf8)!)
         case .creationDate,
              .expirationDate:
             let internalContainer = ASN1Container(payload: container.internalPayload)
-            return String(bytes: internalContainer.internalPayload, encoding: .ascii)!
+            print(String(bytes: internalContainer.internalPayload, encoding: .ascii)!)
         case .inApp:
-            return "in app!"
+            let internalContainer = ASN1Container(payload: container.internalPayload)
+            print(ASN1Container.extractInAppPurchase(fromContainer: internalContainer))
         }
     }
     
+    static func extractInAppPurchase(fromContainer container: ASN1Container) {
+        for internalContainer in container.internalContainers {
+            
+            guard internalContainer.internalContainers.count == 3 else { fatalError() }
+            let typeContainer = internalContainer.internalContainers[0]
+            let versionContainer = internalContainer.internalContainers[1]
+            let valueContainer = internalContainer.internalContainers[2]
+            
+            guard let attributeType = InAppPurchaseAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
+            else {
+                continue
+            }
+            let version = Array(versionContainer.internalPayload).toUInt()
+            
+            let value = ASN1Container.extractInAppPurchaseValue(fromContainer: valueContainer, withType: attributeType)
+            print("\(attributeType): \(value)")
+        }
+    }
     
+    static func extractInAppPurchaseValue(fromContainer container: ASN1Container,
+                                          withType type: InAppPurchaseAttributeType) -> String {
+        switch type {
+        case .quantity,
+             .webOrderLineItemId:
+            let internalContainer = ASN1Container(payload: container.internalPayload)
+            return "\(Array(internalContainer.internalPayload).toUInt())"
+        case .isInIntroOfferPeriod:
+            let internalContainer = ASN1Container(payload: container.internalPayload)
+            let boolValue = Array(internalContainer.internalPayload).toUInt() == 1
+            return "\(boolValue)"
+        case .productId,
+             .transactionId,
+             .originalTransactionId:
+            let internalContainer = ASN1Container(payload: container.internalPayload)
+            return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
+        case .cancellationDate,
+             .expiresDate,
+             .originalPurchaseDate,
+             .purchaseDate:
+            let internalContainer = ASN1Container(payload: container.internalPayload)
+            return String(bytes: internalContainer.internalPayload, encoding: .ascii)!
+        }
+    }
     
     static func extractObjectIdentifier(payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier {
         // todo: parse according to https://docs.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier

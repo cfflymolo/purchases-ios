@@ -28,3 +28,16 @@ enum ReceiptAttributeType: UInt {
          originalApplicationVersion = 19,
          expirationDate = 21
 }
+
+enum InAppPurchaseAttributeType: UInt {
+    case quantity = 1701,
+         productId = 1702,
+         transactionId = 1703,
+         originalTransactionId = 1705,
+         purchaseDate = 1704,
+         originalPurchaseDate = 1706,
+         expiresDate = 1708,
+         isInIntroOfferPeriod = 1719,
+         cancellationDate = 1712,
+         webOrderLineItemId = 1711
+}
