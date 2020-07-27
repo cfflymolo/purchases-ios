@@ -13,7 +13,6 @@ struct PKCS7Extractor {
         let intData = [UInt8](data)
         
         let asn1Container = ASN1Container(payload: ArraySlice(intData))
-        print("asn1Container: \(asn1Container)")
     }
 }
 
@@ -26,6 +25,7 @@ struct ASN1Container {
     let identifierTotalBytes = 1
     var totalBytes: Int { return identifierTotalBytes + Int(length.value) + length.totalBytes }
     var internalContainers: [ASN1Container] = []
+    var inAppReceiptContainer: [ASN1Container] = []
     
     init(payload: ArraySlice<UInt8>) {
         guard payload.count >= 2,
@@ -35,16 +35,64 @@ struct ASN1Container {
         self.containerType = ASN1Container.extractType(byte: firstByte)
         self.length = ASN1Container.extractLength(data: payload.dropFirst())
         self.internalPayload = payload.dropFirst(identifierTotalBytes + length.totalBytes).prefix(Int(length.value))
+        
         if encodingType == .constructed {
-            guard var currentPayload = internalPayload else { fatalError() }
+            var currentPayload = internalPayload
             while (currentPayload.count > 0) {
                 let internalContainer = ASN1Container(payload: currentPayload)
                 internalContainers.append(internalContainer)
                 currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
+                if internalContainer.containerType == .objectIdentifier {
+                    let objectIdentifier = ASN1Container.extractObjectIdentifier(payload: internalContainer.internalPayload)
+                    switch objectIdentifier {
+                    case .data:
+                        ASN1Container.extractReceipt(fromPayload: currentPayload)
+                    default:
+                        break
+                    }
+                }
             }
         }
     }
     
+    static func extractReceipt(fromPayload payload: ArraySlice<UInt8>) {
+        let outerContainer = ASN1Container(payload: payload)
+        guard let internalContainer = outerContainer.internalContainers.first else { fatalError() }
+        let inAppReceiptContainer = ASN1Container(payload: internalContainer.internalPayload)
+        for inAppReceiptAttribute in inAppReceiptContainer.internalContainers {
+            ASN1Container.extractInAppReceiptAttribute(inAppReceiptAttribute)
+        }
+    }
+    
+    static func extractInAppReceiptAttribute(_ container: ASN1Container) {
+        guard container.internalContainers.count == 3 else { fatalError() }
+        let typeContainer = container.internalContainers[0]
+        let versionContainer = container.internalContainers[1]
+        let valueContainer = container.internalContainers[2]
+        let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
+        print("found type: \(String(describing: attributeType))")
+        
+//        print("found version: \(versionContainer)")
+//        print("found value: \(valueContainer)")
+    }
+    
+    static func extractObjectIdentifier(payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier {
+        // todo: parse according to https://docs.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier
+        if payload == [42, 134, 72, 134, 247, 13, 1, 7, 1] {
+            return .data
+        } else {
+            return .signedData
+        }
+    }
+    
+    enum ASN1ObjectIdentifier: String {
+        case data = "1.2.840.113549.1.7.1"
+        case signedData = "1.2.840.113549.1.7.2"
+        case envelopedData = "1.2.840.113549.1.7.3"
+        case signedAndEnvelopedData = "1.2.840.113549.1.7.4"
+        case digestedData = "1.2.840.113549.1.7.5"
+        case encryptedData = "1.2.840.113549.1.7.6"
+    }
     
     static func extractClass(byte: UInt8) -> ASN1Class {
         let firstTwoBits = byte.valueInRange(from: 0, to: 1)
@@ -124,4 +172,3 @@ struct ASN1Length {
     let value: UInt
     let totalBytes: Int
 }
-
