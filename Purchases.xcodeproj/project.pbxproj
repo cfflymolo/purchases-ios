@@ -166,6 +166,7 @@
 		37E35E3A834982B03BC633BC /* StoreKitRequestFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E35A6260C44FCBFF4CBB49 /* StoreKitRequestFetcherTests.swift */; };
 		37E35E3CFED4426C0EE1302C /* RCOffering+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E357C8623F79A4F0BEE213 /* RCOffering+Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		37E35E41EAB29106B74B5FB3 /* NSDate+RCExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E355AE6CB674484555D1AC /* NSDate+RCExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		37E35E8114D1C86015F88AF7 /* ASN1ObjectIdentifierParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E35A91450FFA8269758AE2 /* ASN1ObjectIdentifierParser.swift */; };
 		37E35E9CEC36E93AF682D012 /* RCPromotionalOffer+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E35D29AD7BE9B81DBF6907 /* RCPromotionalOffer+Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		37E35EA1E0F41A8A53236C4B /* RCSystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E353471F474D9092560033 /* RCSystemInfo.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		37E35EA8EA9D49FD95778CC9 /* NSData+RCExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E35097C6785A4A89DEBB18 /* NSData+RCExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -356,6 +357,7 @@
 		37E35A6260C44FCBFF4CBB49 /* StoreKitRequestFetcherTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitRequestFetcherTests.swift; sourceTree = "<group>"; };
 		37E35A6E091B8CD9C967383C /* RCBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCBackend.h; sourceTree = "<group>"; };
 		37E35A7A70B77C0526EA3A28 /* RCSystemInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCSystemInfo.m; sourceTree = "<group>"; };
+		37E35A91450FFA8269758AE2 /* ASN1ObjectIdentifierParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1ObjectIdentifierParser.swift; sourceTree = "<group>"; };
 		37E35ABEE9FD79CCA64E4F8B /* NSData+RCExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+RCExtensionsTests.swift"; sourceTree = "<group>"; };
 		37E35B2CE711472BE58F51ED /* RCEntitlementInfo+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCEntitlementInfo+Protected.h"; sourceTree = "<group>"; };
 		37E35B655B1BA8F52C4349ED /* RCInMemoryCachedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCInMemoryCachedObject.m; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				2D5BB46E24C8FE5000E27537 /* ASN1Interpreter.swift */,
 				2DF4DAEC24CB3DE000391BE7 /* UInt8+Extensions.swift */,
 				37E35467BE5C5AEE23FD2F28 /* ASN1Container.swift */,
+				37E35A91450FFA8269758AE2 /* ASN1ObjectIdentifierParser.swift */,
 			);
 			path = LocalReceiptParsing;
 			sourceTree = "<group>";
@@ -1106,6 +1109,7 @@
 				2D1A297424BF7B29007BE4BD /* ASN1Object+Sequence.swift in Sources */,
 				37E353FA89D4F510BA73F0D3 /* RCProductInfoExtractor.m in Sources */,
 				2D1A297B24BF7B29007BE4BD /* IARError.swift in Sources */,
+				37E35E8114D1C86015F88AF7 /* ASN1ObjectIdentifierParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
