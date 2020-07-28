@@ -26,7 +26,7 @@ extension UInt8 {
         return shifted & mask
     }
     
-    func maskForRange(_ range: UInt8) -> UInt8 {
+    private func maskForRange(_ range: UInt8) -> UInt8 {
         guard 0 <= range && range <= 8 else { fatalError("range must be between 1 and 8") }
         switch range {
         case 1: return 0b1

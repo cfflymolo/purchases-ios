@@ -43,7 +43,9 @@ struct ASN1Container {
                 internalContainers.append(internalContainer)
                 currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
                 if internalContainer.containerType == .objectIdentifier {
-                    let objectIdentifier = ASN1Container.extractObjectIdentifier(payload: internalContainer.internalPayload)
+                    guard let objectIdentifier = ASN1Container.extractObjectIdentifier(payload: internalContainer.internalPayload) else {
+                        break
+                    }
                     switch objectIdentifier {
                     case .data:
                         ASN1Container.extractReceipt(fromPayload: currentPayload)
@@ -149,13 +151,46 @@ struct ASN1Container {
         }
     }
     
-    static func extractObjectIdentifier(payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier {
-        // todo: parse according to https://docs.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier
-        if payload == [42, 134, 72, 134, 247, 13, 1, 7, 1] {
-            return .data
-        } else {
-            return .signedData
+    static func extractObjectIdentifier(payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier? {
+        guard let firstByte = payload.first else { fatalError("invalid object identifier") }
+        
+        var oidBytes: [UInt] = []
+        oidBytes.append(UInt(firstByte / 40))
+        oidBytes.append(UInt(firstByte % 40))
+        
+        let trailingPayload = payload.dropFirst()
+        var currentValue: UInt = 0
+        var isShortLength = false
+        var isAppendingToLongValue = false
+        for byte in trailingPayload {
+            isShortLength = byte.bitAtIndex(0) == 0
+            let byteValue = UInt(byte.valueInRange(from: 1, to: 7))
+
+            if isAppendingToLongValue {
+                currentValue = (currentValue << 7) | byteValue
+                if isShortLength {
+                    oidBytes.append(currentValue)
+                    isAppendingToLongValue = false
+                    currentValue = 0
+                } else {
+                    isAppendingToLongValue = true
+                }
+            } else {
+                if isShortLength {
+                    oidBytes.append(byteValue)
+                    isAppendingToLongValue = false
+                    currentValue = 0
+                } else {
+                    currentValue = byteValue
+                    isAppendingToLongValue = true
+                }
+            }
+            
         }
+        
+        let oidString = oidBytes.map { String($0) }
+                                .joined(separator: ".")
+        return ASN1ObjectIdentifier(rawValue: oidString)
     }
     
     enum ASN1ObjectIdentifier: String {
