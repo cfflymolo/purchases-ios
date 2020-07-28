@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D0B060224D0C768007BB162 /* ASN1Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E35467BE5C5AEE23FD2F28 /* ASN1Container.swift */; };
+		2D0B060324D0C8F8007BB162 /* base64encodedreceipt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559B24C8B5E300DCB087 /* base64encodedreceipt.txt */; };
+		2D0B060424D0C8FB007BB162 /* receiptAsData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559C24C8B5E300DCB087 /* receiptAsData.txt */; };
+		2D0B060524D0C8FF007BB162 /* verifyReceipt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559A24C8B5E300DCB087 /* verifyReceipt.txt */; };
 		2D1A28CE24AA7224006BE931 /* LocalReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A28CC24AA6F81006BE931 /* LocalReceiptParser.swift */; };
 		2D1A297424BF7B29007BE4BD /* ASN1Object+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296024BF7B29007BE4BD /* ASN1Object+Sequence.swift */; };
 		2D1A297524BF7B29007BE4BD /* Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296124BF7B29007BE4BD /* Initialization.swift */; };
@@ -31,7 +35,7 @@
 		2D5033262406E4E8009CAE61 /* RCSpecialSubscriberAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D5033232406E4E8009CAE61 /* RCSpecialSubscriberAttributes.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2D50332A2406EA61009CAE61 /* RCSubscriberAttributesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D5033272406EA61009CAE61 /* RCSubscriberAttributesManager.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2D50332B2406EA61009CAE61 /* RCSubscriberAttributesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5033282406EA61009CAE61 /* RCSubscriberAttributesManager.m */; };
-		2D5BB46B24C8E8ED00E27537 /* PKCS7Extractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5BB46A24C8E8ED00E27537 /* PKCS7Extractor.swift */; };
+		2D5BB46B24C8E8ED00E27537 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5BB46A24C8E8ED00E27537 /* ReceiptParser.swift */; };
 		2D5BB46D24C8EB1C00E27537 /* ASN1Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5BB46C24C8EB1C00E27537 /* ASN1Receipt.swift */; };
 		2D5BB46F24C8FE5000E27537 /* ASN1Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5BB46E24C8FE5000E27537 /* ASN1Interpreter.swift */; };
 		2D8DB34B24072AAE00BE3D31 /* SubscriberAttributeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8DB34A24072AAE00BE3D31 /* SubscriberAttributeTests.swift */; };
@@ -43,9 +47,6 @@
 		2DD448FF24088473002F5694 /* RCPurchases+SubscriberAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD448FD24088473002F5694 /* RCPurchases+SubscriberAttributes.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2DD4490024088473002F5694 /* RCPurchases+SubscriberAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD448FE24088473002F5694 /* RCPurchases+SubscriberAttributes.m */; };
 		2DD7BA4D24C63A830066B4C2 /* MockSystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD7BA4C24C63A830066B4C2 /* MockSystemInfo.swift */; };
-		2DDE559D24C8B5E400DCB087 /* verifyReceipt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559A24C8B5E300DCB087 /* verifyReceipt.txt */; };
-		2DDE559E24C8B5E400DCB087 /* base64encodedreceipt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559B24C8B5E300DCB087 /* base64encodedreceipt.txt */; };
-		2DDE559F24C8B5E400DCB087 /* receiptAsData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559C24C8B5E300DCB087 /* receiptAsData.txt */; };
 		2DEB9767247DB46900A92099 /* RCISOPeriodFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DEB9766247DB46900A92099 /* RCISOPeriodFormatter.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2DEB976B247DB85400A92099 /* SKProductSubscriptionDurationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEB976A247DB85400A92099 /* SKProductSubscriptionDurationExtensions.swift */; };
 		2DF4DAED24CB3DE000391BE7 /* UInt8+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4DAEC24CB3DE000391BE7 /* UInt8+Extensions.swift */; };
@@ -229,7 +230,7 @@
 		2D5033232406E4E8009CAE61 /* RCSpecialSubscriberAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCSpecialSubscriberAttributes.h; path = Purchases/SubscriberAttributes/RCSpecialSubscriberAttributes.h; sourceTree = SOURCE_ROOT; };
 		2D5033272406EA61009CAE61 /* RCSubscriberAttributesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCSubscriberAttributesManager.h; path = Purchases/SubscriberAttributes/RCSubscriberAttributesManager.h; sourceTree = SOURCE_ROOT; };
 		2D5033282406EA61009CAE61 /* RCSubscriberAttributesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCSubscriberAttributesManager.m; path = Purchases/SubscriberAttributes/RCSubscriberAttributesManager.m; sourceTree = SOURCE_ROOT; };
-		2D5BB46A24C8E8ED00E27537 /* PKCS7Extractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7Extractor.swift; sourceTree = "<group>"; };
+		2D5BB46A24C8E8ED00E27537 /* ReceiptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParser.swift; sourceTree = "<group>"; };
 		2D5BB46C24C8EB1C00E27537 /* ASN1Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1Receipt.swift; sourceTree = "<group>"; };
 		2D5BB46E24C8FE5000E27537 /* ASN1Interpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1Interpreter.swift; sourceTree = "<group>"; };
 		2D8DB34A24072AAE00BE3D31 /* SubscriberAttributeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriberAttributeTests.swift; sourceTree = "<group>"; };
@@ -314,6 +315,7 @@
 		37E353471F474D9092560033 /* RCSystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCSystemInfo.h; sourceTree = "<group>"; };
 		37E353AF2CAD3CEDE6D9B368 /* NSError+RCExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSError+RCExtensionsTests.swift"; sourceTree = "<group>"; };
 		37E353CBE9CF2572A72A347F /* HTTPClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClientTests.swift; sourceTree = "<group>"; };
+		37E35467BE5C5AEE23FD2F28 /* ASN1Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1Container.swift; sourceTree = "<group>"; };
 		37E3548189DA008320B3FC98 /* ProductInfoExtractorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductInfoExtractorTests.swift; sourceTree = "<group>"; };
 		37E354902741920FC5AE69A5 /* RCEntitlementInfos+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCEntitlementInfos+Protected.h"; sourceTree = "<group>"; };
 		37E354AF5D4E5FB2787B40DB /* IdentityManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityManagerTests.swift; sourceTree = "<group>"; };
@@ -413,10 +415,11 @@
 			children = (
 				2D1A295F24BF7B29007BE4BD /* TPInAppReceipt */,
 				2D1A28CC24AA6F81006BE931 /* LocalReceiptParser.swift */,
-				2D5BB46A24C8E8ED00E27537 /* PKCS7Extractor.swift */,
+				2D5BB46A24C8E8ED00E27537 /* ReceiptParser.swift */,
 				2D5BB46C24C8EB1C00E27537 /* ASN1Receipt.swift */,
 				2D5BB46E24C8FE5000E27537 /* ASN1Interpreter.swift */,
 				2DF4DAEC24CB3DE000391BE7 /* UInt8+Extensions.swift */,
+				37E35467BE5C5AEE23FD2F28 /* ASN1Container.swift */,
 			);
 			path = LocalReceiptParsing;
 			sourceTree = "<group>";
@@ -1002,9 +1005,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DDE559D24C8B5E400DCB087 /* verifyReceipt.txt in Resources */,
-				2DDE559F24C8B5E400DCB087 /* receiptAsData.txt in Resources */,
-				2DDE559E24C8B5E400DCB087 /* base64encodedreceipt.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1012,6 +1012,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D0B060324D0C8F8007BB162 /* base64encodedreceipt.txt in Resources */,
+				2D0B060424D0C8FB007BB162 /* receiptAsData.txt in Resources */,
+				2D0B060524D0C8FF007BB162 /* verifyReceipt.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1073,6 +1076,7 @@
 				2D1A297E24BF7B29007BE4BD /* ASN1Object.swift in Sources */,
 				37E35024A14FBDD9A5DF0B7C /* NSLocale+RCExtensions.m in Sources */,
 				37E352E9231D083B78E2E345 /* RCBackend.m in Sources */,
+				2D0B060224D0C768007BB162 /* ASN1Container.swift in Sources */,
 				37E35D561B3F5AC49FD6C2CF /* RCHTTPClient.m in Sources */,
 				2D97458F24BDFCEF006245E9 /* IntroEligibilityCalculator.swift in Sources */,
 				2D1A297824BF7B29007BE4BD /* InAppReceipt.swift in Sources */,
@@ -1097,7 +1101,7 @@
 				37E35A7ED3312F10B80FFE2B /* RCDeviceCache.m in Sources */,
 				37E353437E49AA49D6ECC03F /* RCInMemoryCachedObject.m in Sources */,
 				37E351B84EBE06E2F370A835 /* RCISOPeriodFormatter.m in Sources */,
-				2D5BB46B24C8E8ED00E27537 /* PKCS7Extractor.swift in Sources */,
+				2D5BB46B24C8E8ED00E27537 /* ReceiptParser.swift in Sources */,
 				37E3506DF4FDFCE5CA75B057 /* RCProductInfo.m in Sources */,
 				2D1A297424BF7B29007BE4BD /* ASN1Object+Sequence.swift in Sources */,
 				37E353FA89D4F510BA73F0D3 /* RCProductInfoExtractor.m in Sources */,

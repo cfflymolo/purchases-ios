@@ -27,7 +27,7 @@ class LocalReceiptParserTests: XCTestCase {
     func testParseReceiptWithCustomReceiptParser() {
         let receiptData = sampleReceiptData()
         
-        PKCS7Extractor().extract(from: receiptData)
+        ReceiptParser().extract(from: receiptData)
     }
 }
 
