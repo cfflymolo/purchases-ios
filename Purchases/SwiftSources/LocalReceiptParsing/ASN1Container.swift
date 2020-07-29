@@ -61,10 +61,3 @@ struct ASN1Container {
     var internalContainers: [ASN1Container] = []
     var inAppReceiptContainer: [ASN1Container] = []
 }
-
-struct ASN1ContainerMetadata {
-    let containerClass: ASN1Class
-    let containerType: ASN1Type
-    let encodingType: ASN1EncodingType
-    let length: ASN1Length
-}
