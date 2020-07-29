@@ -160,14 +160,17 @@ struct ReceiptParser {
         
         switch type {
         case .quantity,
-             .webOrderLineItemId:
+             .webOrderLineItemId,
+             .productType:
             return Int(Array(internalContainer.internalPayload).toUInt())
-        case .isInIntroOfferPeriod:
+        case .isInIntroOfferPeriod,
+             .isInTrialPeriod:
             let boolValue = Array(internalContainer.internalPayload).toUInt() == 1
             return boolValue
         case .productId,
              .transactionId,
-             .originalTransactionId:
+             .originalTransactionId,
+             .promotionalOfferIdentifier:
             return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
         case .cancellationDate,
              .expiresDate,
