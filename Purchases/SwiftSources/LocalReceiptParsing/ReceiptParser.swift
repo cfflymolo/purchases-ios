@@ -9,10 +9,10 @@
 import Foundation
 
 struct ReceiptParser {
-    let objectIdentifierParser: ASN1ObjectIdentifierParser
+    let objectIdentifierParser: ASN1ObjectIdentifierFactory
 
     init() {
-        self.objectIdentifierParser = ASN1ObjectIdentifierParser()
+        self.objectIdentifierParser = ASN1ObjectIdentifierFactory()
     }
 
     func extract(from data: Data) -> AppleReceipt {
@@ -31,7 +31,7 @@ struct ReceiptParser {
             for internalContainer in container.internalContainers {
                 currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
                 if internalContainer.containerType == .objectIdentifier {
-                    let objectIdentifier = objectIdentifierParser.extractObjectIdentifier(payload: internalContainer.internalPayload)
+                    let objectIdentifier = objectIdentifierParser.build(fromPayload: internalContainer.internalPayload)
                     if objectIdentifier == objectId {
                         return extractASN1(withPayload: currentPayload)
                     }

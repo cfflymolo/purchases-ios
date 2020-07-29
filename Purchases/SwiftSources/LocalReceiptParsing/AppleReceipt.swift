@@ -1,5 +1,5 @@
 //
-//  ASN1Receipt.swift
+//  AppleReceipt.swift
 //  Purchases
 //
 //  Created by Andrés Boedo on 7/22/20.

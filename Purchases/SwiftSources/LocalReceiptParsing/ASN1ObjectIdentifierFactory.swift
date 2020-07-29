@@ -14,8 +14,8 @@ enum ASN1ObjectIdentifier: String {
     case encryptedData = "1.2.840.113549.1.7.6"
 }
 
-class ASN1ObjectIdentifierParser {
-    func extractObjectIdentifier(payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier? {
+class ASN1ObjectIdentifierFactory {
+    func build(fromPayload payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier? {
         guard let firstByte = payload.first else { fatalError("invalid object identifier") }
 
         var oidBytes: [UInt] = []
