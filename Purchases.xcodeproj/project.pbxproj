@@ -12,24 +12,6 @@
 		2D0B060424D0C8FB007BB162 /* receiptAsData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559C24C8B5E300DCB087 /* receiptAsData.txt */; };
 		2D0B060524D0C8FF007BB162 /* verifyReceipt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2DDE559A24C8B5E300DCB087 /* verifyReceipt.txt */; };
 		2D1A28CE24AA7224006BE931 /* LocalReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A28CC24AA6F81006BE931 /* LocalReceiptParser.swift */; };
-		2D1A297424BF7B29007BE4BD /* ASN1Object+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296024BF7B29007BE4BD /* ASN1Object+Sequence.swift */; };
-		2D1A297524BF7B29007BE4BD /* Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296124BF7B29007BE4BD /* Initialization.swift */; };
-		2D1A297624BF7B29007BE4BD /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296224BF7B29007BE4BD /* Date+Extension.swift */; };
-		2D1A297724BF7B29007BE4BD /* Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296324BF7B29007BE4BD /* Extras.swift */; };
-		2D1A297824BF7B29007BE4BD /* InAppReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296424BF7B29007BE4BD /* InAppReceipt.swift */; };
-		2D1A297924BF7B29007BE4BD /* TPInAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296524BF7B29007BE4BD /* TPInAppPurchase.swift */; };
-		2D1A297A24BF7B29007BE4BD /* InAppReceiptPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296624BF7B29007BE4BD /* InAppReceiptPayload.swift */; };
-		2D1A297B24BF7B29007BE4BD /* IARError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296724BF7B29007BE4BD /* IARError.swift */; };
-		2D1A297C24BF7B29007BE4BD /* PKC7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296824BF7B29007BE4BD /* PKC7.swift */; };
-		2D1A297D24BF7B29007BE4BD /* ASN1Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296924BF7B29007BE4BD /* ASN1Helper.swift */; };
-		2D1A297E24BF7B29007BE4BD /* ASN1Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296A24BF7B29007BE4BD /* ASN1Object.swift */; };
-		2D1A297F24BF7B29007BE4BD /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296B24BF7B29007BE4BD /* Validation.swift */; };
-		2D1A298024BF7B29007BE4BD /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296C24BF7B29007BE4BD /* Data+Extension.swift */; };
-		2D1A298124BF7B29007BE4BD /* PKCS7Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296D24BF7B29007BE4BD /* PKCS7Helper.swift */; };
-		2D1A298224BF7B29007BE4BD /* Asn1Coder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296E24BF7B29007BE4BD /* Asn1Coder.swift */; };
-		2D1A298324BF7B29007BE4BD /* ASN1Object+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296F24BF7B29007BE4BD /* ASN1Object+Helper.swift */; };
-		2D1A298424BF7B29007BE4BD /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A297224BF7B29007BE4BD /* Array+Extension.swift */; };
-		2D1A298524BF7B29007BE4BD /* ASN1Object+ValueReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A297324BF7B29007BE4BD /* ASN1Object+ValueReading.swift */; };
 		2D5033242406E4E8009CAE61 /* RCSubscriberAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D5033212406E4E8009CAE61 /* RCSubscriberAttribute.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2D5033252406E4E8009CAE61 /* RCSubscriberAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5033222406E4E8009CAE61 /* RCSubscriberAttribute.m */; };
 		2D5033262406E4E8009CAE61 /* RCSpecialSubscriberAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D5033232406E4E8009CAE61 /* RCSpecialSubscriberAttributes.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -208,24 +190,6 @@
 
 /* Begin PBXFileReference section */
 		2D1A28CC24AA6F81006BE931 /* LocalReceiptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptParser.swift; sourceTree = "<group>"; };
-		2D1A296024BF7B29007BE4BD /* ASN1Object+Sequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASN1Object+Sequence.swift"; sourceTree = "<group>"; };
-		2D1A296124BF7B29007BE4BD /* Initialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Initialization.swift; sourceTree = "<group>"; };
-		2D1A296224BF7B29007BE4BD /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		2D1A296324BF7B29007BE4BD /* Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extras.swift; sourceTree = "<group>"; };
-		2D1A296424BF7B29007BE4BD /* InAppReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceipt.swift; sourceTree = "<group>"; };
-		2D1A296524BF7B29007BE4BD /* TPInAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TPInAppPurchase.swift; sourceTree = "<group>"; };
-		2D1A296624BF7B29007BE4BD /* InAppReceiptPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptPayload.swift; sourceTree = "<group>"; };
-		2D1A296724BF7B29007BE4BD /* IARError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IARError.swift; sourceTree = "<group>"; };
-		2D1A296824BF7B29007BE4BD /* PKC7.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKC7.swift; sourceTree = "<group>"; };
-		2D1A296924BF7B29007BE4BD /* ASN1Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1Helper.swift; sourceTree = "<group>"; };
-		2D1A296A24BF7B29007BE4BD /* ASN1Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1Object.swift; sourceTree = "<group>"; };
-		2D1A296B24BF7B29007BE4BD /* Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
-		2D1A296C24BF7B29007BE4BD /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
-		2D1A296D24BF7B29007BE4BD /* PKCS7Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKCS7Helper.swift; sourceTree = "<group>"; };
-		2D1A296E24BF7B29007BE4BD /* Asn1Coder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Asn1Coder.swift; sourceTree = "<group>"; };
-		2D1A296F24BF7B29007BE4BD /* ASN1Object+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASN1Object+Helper.swift"; sourceTree = "<group>"; };
-		2D1A297224BF7B29007BE4BD /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
-		2D1A297324BF7B29007BE4BD /* ASN1Object+ValueReading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASN1Object+ValueReading.swift"; sourceTree = "<group>"; };
 		2D5033212406E4E8009CAE61 /* RCSubscriberAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCSubscriberAttribute.h; path = Purchases/SubscriberAttributes/RCSubscriberAttribute.h; sourceTree = SOURCE_ROOT; };
 		2D5033222406E4E8009CAE61 /* RCSubscriberAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCSubscriberAttribute.m; path = Purchases/SubscriberAttributes/RCSubscriberAttribute.m; sourceTree = SOURCE_ROOT; };
 		2D5033232406E4E8009CAE61 /* RCSpecialSubscriberAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCSpecialSubscriberAttributes.h; path = Purchases/SubscriberAttributes/RCSpecialSubscriberAttributes.h; sourceTree = SOURCE_ROOT; };
@@ -415,7 +379,6 @@
 		2D1A28CB24AA6F4B006BE931 /* LocalReceiptParsing */ = {
 			isa = PBXGroup;
 			children = (
-				2D1A295F24BF7B29007BE4BD /* TPInAppReceipt */,
 				2D1A28CC24AA6F81006BE931 /* LocalReceiptParser.swift */,
 				2D5BB46A24C8E8ED00E27537 /* ReceiptParser.swift */,
 				2D5BB46C24C8EB1C00E27537 /* ASN1Receipt.swift */,
@@ -425,47 +388,6 @@
 				37E35A91450FFA8269758AE2 /* ASN1ObjectIdentifierParser.swift */,
 			);
 			path = LocalReceiptParsing;
-			sourceTree = "<group>";
-		};
-		2D1A295F24BF7B29007BE4BD /* TPInAppReceipt */ = {
-			isa = PBXGroup;
-			children = (
-				2D1A296024BF7B29007BE4BD /* ASN1Object+Sequence.swift */,
-				2D1A296124BF7B29007BE4BD /* Initialization.swift */,
-				2D1A296224BF7B29007BE4BD /* Date+Extension.swift */,
-				2D1A296324BF7B29007BE4BD /* Extras.swift */,
-				2D1A296424BF7B29007BE4BD /* InAppReceipt.swift */,
-				2D1A296524BF7B29007BE4BD /* TPInAppPurchase.swift */,
-				2D1A296624BF7B29007BE4BD /* InAppReceiptPayload.swift */,
-				2D1A296724BF7B29007BE4BD /* IARError.swift */,
-				2D1A296824BF7B29007BE4BD /* PKC7.swift */,
-				2D1A296924BF7B29007BE4BD /* ASN1Helper.swift */,
-				2D1A296A24BF7B29007BE4BD /* ASN1Object.swift */,
-				2D1A296B24BF7B29007BE4BD /* Validation.swift */,
-				2D1A296C24BF7B29007BE4BD /* Data+Extension.swift */,
-				2D1A296D24BF7B29007BE4BD /* PKCS7Helper.swift */,
-				2D1A296E24BF7B29007BE4BD /* Asn1Coder.swift */,
-				2D1A296F24BF7B29007BE4BD /* ASN1Object+Helper.swift */,
-				2D1A297324BF7B29007BE4BD /* ASN1Object+ValueReading.swift */,
-				2D1A297024BF7B29007BE4BD /* Vendor */,
-			);
-			path = TPInAppReceipt;
-			sourceTree = "<group>";
-		};
-		2D1A297024BF7B29007BE4BD /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-				2D1A297124BF7B29007BE4BD /* CryptoSwift */,
-			);
-			path = Vendor;
-			sourceTree = "<group>";
-		};
-		2D1A297124BF7B29007BE4BD /* CryptoSwift */ = {
-			isa = PBXGroup;
-			children = (
-				2D1A297224BF7B29007BE4BD /* Array+Extension.swift */,
-			);
-			path = CryptoSwift;
 			sourceTree = "<group>";
 		};
 		2D5033202406E4C7009CAE61 /* SubscriberAttributes */ = {
@@ -1050,49 +972,33 @@
 				35B54E4622EA6F11005918B1 /* RCEntitlementInfo.m in Sources */,
 				3585D6A422E680E30079E2C5 /* RCPackage.m in Sources */,
 				2D1A28CE24AA7224006BE931 /* LocalReceiptParser.swift in Sources */,
-				2D1A298324BF7B29007BE4BD /* ASN1Object+Helper.swift in Sources */,
 				35B54E4C22EA6FD3005918B1 /* RCEntitlementInfos.m in Sources */,
 				35D3AB442030B4C600DE42C5 /* RCIntroEligibility.m in Sources */,
-				2D1A297624BF7B29007BE4BD /* Date+Extension.swift in Sources */,
 				352E88442229B1A70046A10A /* RCPurchasesErrorUtils.m in Sources */,
 				351F4FB01F803D0700F245F4 /* RCPurchaserInfo.m in Sources */,
-				2D1A297C24BF7B29007BE4BD /* PKC7.swift in Sources */,
 				2D97458D24BDFBF8006245E9 /* ProductsManager.swift in Sources */,
 				2D5033252406E4E8009CAE61 /* RCSubscriberAttribute.m in Sources */,
 				2DD4490024088473002F5694 /* RCPurchases+SubscriberAttributes.m in Sources */,
 				350FBDEA1F7EEF070065833D /* RCPurchases.m in Sources */,
-				2D1A298524BF7B29007BE4BD /* ASN1Object+ValueReading.swift in Sources */,
-				2D1A297F24BF7B29007BE4BD /* Validation.swift in Sources */,
 				2D50332B2406EA61009CAE61 /* RCSubscriberAttributesManager.m in Sources */,
 				354D50E022E7D014009B870C /* RCOfferings.m in Sources */,
 				35CE74FD20C38A7100CE09D8 /* RCOffering.m in Sources */,
-				2D1A298024BF7B29007BE4BD /* Data+Extension.swift in Sources */,
 				37E35C90AAEFEA77BB48DC0F /* NSData+RCExtensions.m in Sources */,
-				2D1A297524BF7B29007BE4BD /* Initialization.swift in Sources */,
-				2D1A298424BF7B29007BE4BD /* Array+Extension.swift in Sources */,
-				2D1A298124BF7B29007BE4BD /* PKCS7Helper.swift in Sources */,
 				2D5BB46D24C8EB1C00E27537 /* ASN1Receipt.swift in Sources */,
 				37E3556DD7FB5317A43086CC /* NSDate+RCExtensions.m in Sources */,
-				2D1A297924BF7B29007BE4BD /* TPInAppPurchase.swift in Sources */,
 				37E35B4BDE7D7B1EFB3EE800 /* NSError+RCExtensions.m in Sources */,
 				2DF4DAED24CB3DE000391BE7 /* UInt8+Extensions.swift in Sources */,
-				2D1A297E24BF7B29007BE4BD /* ASN1Object.swift in Sources */,
 				37E35024A14FBDD9A5DF0B7C /* NSLocale+RCExtensions.m in Sources */,
 				37E352E9231D083B78E2E345 /* RCBackend.m in Sources */,
 				2D0B060224D0C768007BB162 /* ASN1Container.swift in Sources */,
 				37E35D561B3F5AC49FD6C2CF /* RCHTTPClient.m in Sources */,
 				2D97458F24BDFCEF006245E9 /* IntroEligibilityCalculator.swift in Sources */,
-				2D1A297824BF7B29007BE4BD /* InAppReceipt.swift in Sources */,
 				37E35EB1B9FE3F739B8C0D71 /* RCDateProvider.m in Sources */,
 				37E35DC1B42094073EB105AC /* RCSystemInfo.m in Sources */,
 				37E352BAA55C31B1E278CA8A /* RCLogUtils.m in Sources */,
 				37E35EACCCC014F719E63D5F /* RCAttributionData.m in Sources */,
-				2D1A297724BF7B29007BE4BD /* Extras.swift in Sources */,
-				2D1A297A24BF7B29007BE4BD /* InAppReceiptPayload.swift in Sources */,
 				37E350AAD0BAE521A7F94846 /* RCAttributionFetcher.m in Sources */,
 				37E35889F275514EE3125439 /* RCIdentityManager.m in Sources */,
-				2D1A298224BF7B29007BE4BD /* Asn1Coder.swift in Sources */,
-				2D1A297D24BF7B29007BE4BD /* ASN1Helper.swift in Sources */,
 				37E358DB4F4016AC297D6B00 /* RCOfferingsFactory.m in Sources */,
 				35A6DC1924BE5FF100C3983D /* Transaction.swift in Sources */,
 				37E35DD8BE40E352311AC2C1 /* RCPromotionalOffer.m in Sources */,
@@ -1106,9 +1012,7 @@
 				37E351B84EBE06E2F370A835 /* RCISOPeriodFormatter.m in Sources */,
 				2D5BB46B24C8E8ED00E27537 /* ReceiptParser.swift in Sources */,
 				37E3506DF4FDFCE5CA75B057 /* RCProductInfo.m in Sources */,
-				2D1A297424BF7B29007BE4BD /* ASN1Object+Sequence.swift in Sources */,
 				37E353FA89D4F510BA73F0D3 /* RCProductInfoExtractor.m in Sources */,
-				2D1A297B24BF7B29007BE4BD /* IARError.swift in Sources */,
 				37E35E8114D1C86015F88AF7 /* ASN1ObjectIdentifierParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,18 +12,6 @@ import XCTest
 
 class LocalReceiptParserTests: XCTestCase {
     
-    func testParseReceiptWithTPInAppReceipt() {
-        let receiptData = sampleReceiptData()
-        do {
-            let parsedReceipt = try InAppReceipt(receiptData: receiptData)
-            
-            print(parsedReceipt)
-        }
-        catch let error {
-            fatalError("couldn't parse receipt. error: \(error.localizedDescription)")
-        }
-    }
-    
     func testParseReceiptWithCustomReceiptParser() {
         let receiptData = sampleReceiptData()
         
