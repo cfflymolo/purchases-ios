@@ -9,9 +9,9 @@
 import Foundation
 
 struct ReceiptParser {
-    let objectIdentifierParser: ASN1ObjectIdentifierFactory
-    let containerFactory: ASN1ContainerFactory
-    let receiptFactory: AppleReceiptFactory
+    private let objectIdentifierParser: ASN1ObjectIdentifierFactory
+    private let containerFactory: ASN1ContainerFactory
+    private let receiptFactory: AppleReceiptFactory
 
     init() {
         self.objectIdentifierParser = ASN1ObjectIdentifierFactory()
@@ -19,15 +19,17 @@ struct ReceiptParser {
         self.receiptFactory = AppleReceiptFactory()
     }
 
-    func extract(from data: Data) -> AppleReceipt {
+    func parse(from data: Data) -> AppleReceipt {
         let intData = [UInt8](data)
 
-        let asn1Container = containerFactory.extractASN1(withPayload: ArraySlice(intData))
+        let asn1Container = containerFactory.build(fromPayload: ArraySlice(intData))
         let receiptASN1Container = findASN1Container(withObjectId: .data, inContainer: asn1Container)!
-        let receipt = receiptFactory.extractReceipt(fromASN1Container: receiptASN1Container)
+        let receipt = receiptFactory.build(fromASN1Container: receiptASN1Container)
         return receipt
     }
+}
 
+private extension ReceiptParser {
     func findASN1Container(withObjectId objectId: ASN1ObjectIdentifier,
                            inContainer container: ASN1Container) -> ASN1Container? {
         if container.encodingType == .constructed {
@@ -37,7 +39,7 @@ struct ReceiptParser {
                 if internalContainer.containerType == .objectIdentifier {
                     let objectIdentifier = objectIdentifierParser.build(fromPayload: internalContainer.internalPayload)
                     if objectIdentifier == objectId {
-                        return containerFactory.extractASN1(withPayload: currentPayload)
+                        return containerFactory.build(fromPayload: currentPayload)
                     }
                 } else {
                     let receipt = findASN1Container(withObjectId: objectId, inContainer: internalContainer)

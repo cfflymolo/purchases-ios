@@ -15,7 +15,7 @@ class LocalReceiptParserTests: XCTestCase {
     func testParseReceiptWithCustomReceiptParser() {
         let receiptData = sampleReceiptData()
         
-        let receipt = ReceiptParser().extract(from: receiptData)
+        let receipt = ReceiptParser().parse(from: receiptData)
         print(receipt.description)
     }
 }

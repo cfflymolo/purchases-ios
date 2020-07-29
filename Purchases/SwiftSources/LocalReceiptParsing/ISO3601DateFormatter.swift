@@ -19,5 +19,4 @@ struct ISO3601DateFormatter {
         }
         return nil
     }
-
 }

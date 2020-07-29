@@ -94,6 +94,7 @@
 		37E354AFE06A9723230E47B8 /* RCInMemoryCachedObject+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E35A6246A6969C7236B29B /* RCInMemoryCachedObject+Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		37E354BE25CE61E55E4FD89C /* MockDeviceCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E354BEB8FDE39CAB7C4D69 /* MockDeviceCache.swift */; };
 		37E354C46A8A3C2DC861C224 /* MockHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E35292137BBF2810CE4F4B /* MockHTTPClient.swift */; };
+		37E354D57EEA141835198BE0 /* ISO3601DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E357FED2DE87DFF2CEF33B /* ISO3601DateFormatter.swift */; };
 		37E354E0A9A371481540B2B0 /* MockAttributionFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351CD1EE6B897F434EA40 /* MockAttributionFetcher.swift */; };
 		37E354F65C32F553F4697C0E /* RCBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E35A6E091B8CD9C967383C /* RCBackend.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		37E3554836D4DA9336B9FA70 /* MockProductDiscount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E3572040A16F10B957563A /* MockProductDiscount.swift */; };
@@ -312,6 +313,7 @@
 		37E357F69438004E1F443C03 /* BackendSubscriberAttributesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackendSubscriberAttributesTests.swift; sourceTree = "<group>"; };
 		37E357FA5215FF384262957E /* NSData+RCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+RCExtensions.m"; sourceTree = "<group>"; };
 		37E357FBA3184BDE6E95DED4 /* MockSKProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockSKProduct.swift; sourceTree = "<group>"; };
+		37E357FED2DE87DFF2CEF33B /* ISO3601DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO3601DateFormatter.swift; sourceTree = "<group>"; };
 		37E35804C14F5E6CEAF3909C /* RCStoreKitRequestFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCStoreKitRequestFetcher.h; sourceTree = "<group>"; };
 		37E3582920E16E065502E5FC /* EntitlementInfosTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntitlementInfosTests.swift; sourceTree = "<group>"; };
 		37E3583675928C01D92E3166 /* ProductInfoExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductInfoExtensions.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				37E35F297EC53C2104E71700 /* InAppPurchaseFactory.swift */,
 				37E3524AAEF2CF59C2D40518 /* ASN1ContainerFactory.swift */,
 				37E35187B4552038B1664D42 /* AppleReceiptFactory.swift */,
+				37E357FED2DE87DFF2CEF33B /* ISO3601DateFormatter.swift */,
 			);
 			path = LocalReceiptParsing;
 			sourceTree = "<group>";
@@ -1026,6 +1029,7 @@
 				37E35046D94333368159A69D /* InAppPurchaseFactory.swift in Sources */,
 				37E35BE14C9039676C5A6240 /* ASN1ContainerFactory.swift in Sources */,
 				37E35F8716CFAA62D5ACF5A7 /* AppleReceiptFactory.swift in Sources */,
+				37E354D57EEA141835198BE0 /* ISO3601DateFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

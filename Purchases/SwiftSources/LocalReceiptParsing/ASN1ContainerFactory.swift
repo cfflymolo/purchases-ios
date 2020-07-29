@@ -4,9 +4,10 @@
 //
 
 import Foundation
-class ASN1ContainerFactory {
 
-    func extractASN1(withPayload payload: ArraySlice<UInt8>) -> ASN1Container {
+struct ASN1ContainerFactory {
+
+    func build(fromPayload payload: ArraySlice<UInt8>) -> ASN1Container {
         guard payload.count >= 2,
             let firstByte = payload.first else { fatalError("data format invalid") }
         let containerClass = extractClass(byte: firstByte)
@@ -19,7 +20,7 @@ class ASN1ContainerFactory {
         if encodingType == .constructed {
             var currentPayload = internalPayload
             while (currentPayload.count > 0) {
-                let internalContainer = extractASN1(withPayload: currentPayload)
+                let internalContainer = build(fromPayload: currentPayload)
                 internalContainers.append(internalContainer)
                 currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
             }
@@ -31,6 +32,9 @@ class ASN1ContainerFactory {
                              internalPayload: internalPayload,
                              internalContainers: internalContainers)
     }
+}
+
+private extension ASN1ContainerFactory {
 
     func extractClass(byte: UInt8) -> ASN1Class {
         let firstTwoBits = byte.valueInRange(from: 0, to: 1)

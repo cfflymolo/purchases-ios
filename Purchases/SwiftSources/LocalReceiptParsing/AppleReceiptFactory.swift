@@ -6,18 +6,18 @@
 import Foundation
 
 struct AppleReceiptFactory {
-    let containerFactory: ASN1ContainerFactory
-    let inAppPurchaseFactory: InAppPurchaseFactory
+    private let containerFactory: ASN1ContainerFactory
+    private let inAppPurchaseFactory: InAppPurchaseFactory
 
     init() {
         self.containerFactory = ASN1ContainerFactory()
         self.inAppPurchaseFactory = InAppPurchaseFactory()
     }
 
-    func extractReceipt(fromASN1Container container: ASN1Container) -> AppleReceipt {
+    func build(fromASN1Container container: ASN1Container) -> AppleReceipt {
         let receipt = AppleReceipt()
         guard let internalContainer = container.internalContainers.first else { fatalError() }
-        let receiptContainer = containerFactory.extractASN1(withPayload: internalContainer.internalPayload)
+        let receiptContainer = containerFactory.build(fromPayload: internalContainer.internalPayload)
         for receiptAttribute in receiptContainer.internalContainers {
             let typeContainer = receiptAttribute.internalContainers[0]
             let versionContainer = receiptAttribute.internalContainers[1]
@@ -33,7 +33,9 @@ struct AppleReceiptFactory {
         }
         return receipt
     }
+}
 
+private extension AppleReceiptFactory {
     func extractReceiptAttributeValue(fromContainer container: ASN1Container,
                                       withType type: ReceiptAttributeType) -> ReceiptExtractableValueType {
         let payload = container.internalPayload
@@ -44,15 +46,15 @@ struct AppleReceiptFactory {
         case .applicationVersion,
              .originalApplicationVersion,
              .bundleId:
-            let internalContainer = containerFactory.extractASN1(withPayload: payload)
+            let internalContainer = containerFactory.build(fromPayload: payload)
             return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
         case .creationDate,
              .expirationDate:
-            let internalContainer = containerFactory.extractASN1(withPayload: payload)
+            let internalContainer = containerFactory.build(fromPayload: payload)
             return ISO3601DateFormatter.shared.date(fromBytes: internalContainer.internalPayload)!
         case .inApp:
-            let internalContainer = containerFactory.extractASN1(withPayload: payload)
-            return inAppPurchaseFactory.extractInAppPurchase(fromContainer: internalContainer)
+            let internalContainer = containerFactory.build(fromPayload: payload)
+            return inAppPurchaseFactory.build(fromContainer: internalContainer)
         }
     }
 }

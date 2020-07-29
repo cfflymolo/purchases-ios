@@ -6,13 +6,13 @@
 import Foundation
 
 struct InAppPurchaseFactory {
-    let containerFactory: ASN1ContainerFactory
+    private let containerFactory: ASN1ContainerFactory
 
     init() {
         self.containerFactory = ASN1ContainerFactory()
     }
 
-    func extractInAppPurchase(fromContainer container: ASN1Container) -> InAppPurchase {
+    func build(fromContainer container: ASN1Container) -> InAppPurchase {
         let inAppPurchase = InAppPurchase()
         for internalContainer in container.internalContainers {
             guard internalContainer.internalContainers.count == 3 else { fatalError() }
@@ -33,10 +33,13 @@ struct InAppPurchaseFactory {
         }
         return inAppPurchase
     }
+}
+
+private extension InAppPurchaseFactory {
 
     func extractInAppPurchaseValue(fromContainer container: ASN1Container,
                                    withType type: InAppPurchaseAttributeType) -> InAppPurchaseExtractableValueType? {
-        let internalContainer = containerFactory.extractASN1(withPayload: container.internalPayload)
+        let internalContainer = containerFactory.build(fromPayload: container.internalPayload)
         guard internalContainer.length.value > 0 else { return nil }
 
         switch type {

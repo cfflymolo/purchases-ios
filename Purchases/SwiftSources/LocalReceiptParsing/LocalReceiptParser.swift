@@ -8,15 +8,15 @@
 
 import Foundation
 
-internal enum LocalReceiptParserErrorCode: Int {
+enum LocalReceiptParserErrorCode: Int {
     case ReceiptNotFound,
          UnknownError
 }
 
-internal class LocalReceiptParser {
+class LocalReceiptParser {
     
     func purchasedIntroOfferProductIdentifiers(receiptData: Data) -> Set<String> {
-        let receipt = ReceiptParser().extract(from: receiptData)
+        let receipt = ReceiptParser().parse(from: receiptData)
         
         let productIdentifiers = receipt.inAppPurchases
             .filter { $0.isInIntroOfferPeriod == true  || $0.isInTrialPeriod == true }
