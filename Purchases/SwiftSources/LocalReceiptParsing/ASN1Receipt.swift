@@ -46,6 +46,23 @@ class AppleReceipt {
             self.inAppPurchases.append(inApp)
         }
     }
+
+    var asDict: [String: Any] {
+        return [
+            "bundleId": bundleId ?? "",
+            "applicationVersion": applicationVersion ?? "",
+            "originalApplicationVersion": originalApplicationVersion ?? "",
+            "opaqueValue": opaqueValue ?? "",
+            "sha1Hash": sha1Hash ?? "",
+            "creationDate": creationDate ?? "",
+            "expirationDate": expirationDate ?? "",
+            "inAppPurchases": inAppPurchases.map { $0.asDict }
+        ]
+    }
+
+    var description: String {
+        return String(describing: self.asDict)
+    }
 }
 
 class InAppPurchase {
@@ -93,6 +110,25 @@ class InAppPurchase {
             guard value is Int, let castedValue = value as? Int else { fatalError() }
             self.webOrderLineItemId = castedValue
         }
+    }
+
+    var asDict: [String: InAppPurchaseExtractableValueType] {
+        return [
+            "quantity": quantity ?? "",
+            "productId": productId ?? "",
+            "transactionId": transactionId ?? "",
+            "originalTransactionId": originalTransactionId ?? "",
+            "purchaseDate": purchaseDate ?? "",
+            "originalPurchaseDate": originalPurchaseDate ?? "",
+            "expiresDate": expiresDate ?? "",
+            "cancellationDate": cancellationDate ?? "",
+            "isInIntroOfferPeriod": isInIntroOfferPeriod ?? "",
+            "webOrderLineItemId": webOrderLineItemId ?? ""
+        ]
+    }
+
+    var description: String {
+        return String(describing: self.asDict)
     }
 }
 

@@ -78,22 +78,8 @@ struct ReceiptParser {
             let value = extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
             receipt.setAttribute(nonOptionalType, value: value)
         }
+        print(receipt.description)
     }
-
-//    func extractInAppReceiptAttribute(_ container: ASN1Container) -> ReceiptExtractableValueType? {
-//        guard container.internalContainers.count == 3 else { fatalError() }
-//        let typeContainer = container.internalContainers[0]
-//        let versionContainer = container.internalContainers[1]
-//        let valueContainer = container.internalContainers[2]
-//        let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
-//        let version = Array(versionContainer.internalPayload).toUInt()
-//        guard let nonOptionalType = attributeType else {
-//            print("skipping in app attribute")
-//            return nil
-//        }
-//
-//        return extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
-//    }
 
     func extractReceiptAttributeValue(fromContainer container: ASN1Container,
                                       withType type: ReceiptAttributeType) -> ReceiptExtractableValueType {
