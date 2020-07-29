@@ -15,10 +15,48 @@ struct ReceiptParser {
         self.objectIdentifierParser = ASN1ObjectIdentifierParser()
     }
 
-    func extract(from data: Data) {
+    func extract(from data: Data) -> AppleReceipt {
         let intData = [UInt8](data)
 
         let asn1Container = extractASN1(withPayload: ArraySlice(intData))
+        let receiptASN1Container = findASN1Container(withObjectId: .data, inContainer: asn1Container)!
+        let receipt = extractReceipt(fromASN1Container: receiptASN1Container)
+        return receipt
+    }
+    
+    func findASN1Container(withObjectId objectId: ASN1ObjectIdentifier,
+                           inContainer container: ASN1Container) -> ASN1Container? {
+        if container.encodingType == .constructed {
+            var currentPayload = container.internalPayload
+            for internalContainer in container.internalContainers {
+                currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
+                if internalContainer.containerType == .objectIdentifier {
+                    let objectIdentifier = objectIdentifierParser.extractObjectIdentifier(payload: internalContainer.internalPayload)
+                    if objectIdentifier == objectId {
+                        return extractASN1(withPayload: currentPayload)
+                    }
+                } else {
+                    let receipt = findASN1Container(withObjectId: objectId, inContainer: internalContainer)
+                    if receipt != nil {
+                        return receipt
+                    }
+                }
+            }
+        }
+        return nil
+    }
+    
+    func extractMetadata(fromPayload payload: ArraySlice<UInt8>) -> ASN1ContainerMetadata {
+        guard payload.count >= 2,
+            let firstByte = payload.first else { fatalError("data format invalid") }
+        let containerClass = extractClass(byte: firstByte)
+        let encodingType = extractEncodingType(byte: firstByte)
+        let containerType = extractType(byte: firstByte)
+        let length = extractLength(data: payload.dropFirst())
+        return ASN1ContainerMetadata(containerClass: containerClass,
+                                     containerType: containerType,
+                                     encodingType: encodingType,
+                                     length: length)
     }
 
     func extractASN1(withPayload payload: ArraySlice<UInt8>) -> ASN1Container {
@@ -37,19 +75,6 @@ struct ReceiptParser {
                 let internalContainer = extractASN1(withPayload: currentPayload)
                 internalContainers.append(internalContainer)
                 currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
-                if internalContainer.containerType == .objectIdentifier {
-                    guard let objectIdentifier = objectIdentifierParser.extractObjectIdentifier(payload:
-                                                                                                internalContainer.internalPayload)
-                        else {
-                        break
-                    }
-                    switch objectIdentifier {
-                    case .data:
-                        extractReceipt(fromPayload: currentPayload)
-                    default:
-                        break
-                    }
-                }
             }
         }
         return ASN1Container(containerClass: containerClass,
@@ -60,10 +85,9 @@ struct ReceiptParser {
                              internalContainers: internalContainers)
     }
 
-    func extractReceipt(fromPayload payload: ArraySlice<UInt8>) {
-        let outerContainer = extractASN1(withPayload: payload)
-        var receipt = AppleReceipt()
-        guard let internalContainer = outerContainer.internalContainers.first else { fatalError() }
+    func extractReceipt(fromASN1Container container: ASN1Container) -> AppleReceipt {
+        let receipt = AppleReceipt()
+        guard let internalContainer = container.internalContainers.first else { fatalError() }
         let receiptContainer = extractASN1(withPayload: internalContainer.internalPayload)
         for receiptAttribute in receiptContainer.internalContainers {
             let typeContainer = receiptAttribute.internalContainers[0]
@@ -78,7 +102,7 @@ struct ReceiptParser {
             let value = extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
             receipt.setAttribute(nonOptionalType, value: value)
         }
-        print(receipt.description)
+        return receipt
     }
 
     func extractReceiptAttributeValue(fromContainer container: ASN1Container,
