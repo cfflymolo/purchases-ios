@@ -57,11 +57,7 @@ struct InAppPurchaseFactory {
              .expiresDate,
              .originalPurchaseDate,
              .purchaseDate:
-            // todo: use only one date formatter
-            let rfc3339DateFormatter = DateFormatter()
-            rfc3339DateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
-            let dateString = String(bytes: internalContainer.internalPayload, encoding: .ascii)!
-            return rfc3339DateFormatter.date(from: dateString)!
+            return ISO3601DateFormatter.shared.date(fromBytes: internalContainer.internalPayload)!
         }
     }
 }
