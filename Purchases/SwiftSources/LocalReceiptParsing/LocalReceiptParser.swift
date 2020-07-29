@@ -16,17 +16,11 @@ internal enum LocalReceiptParserErrorCode: Int {
 internal class LocalReceiptParser {
     
     func purchasedIntroOfferProductIdentifiers(receiptData: Data) -> Set<String> {
-        do {
-            let receipt = try InAppReceipt(receiptData: receiptData)
-            
-            let productIdentifiers = receipt.purchases
-                .filter { $0.subscriptionTrialPeriod || $0.subscriptionIntroductoryPricePeriod }
-                .map { $0.productIdentifier }
-            return Set(productIdentifiers)
-        } catch let error {
-            print("couldn't parse the receipt, error: \(error.localizedDescription)")
-        }
+        let receipt = ReceiptParser().extract(from: receiptData)
         
-        return Set()
+        let productIdentifiers = receipt.inAppPurchases
+            .filter { $0.isInIntroOfferPeriod == true  || $0.isInTrialPeriod == true }
+            .map { $0.productId! }
+        return Set(productIdentifiers)
     }
 }
