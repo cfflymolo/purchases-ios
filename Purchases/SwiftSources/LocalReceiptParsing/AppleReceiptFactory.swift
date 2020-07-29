@@ -23,35 +23,38 @@ struct AppleReceiptFactory {
         for receiptAttribute in receiptContainer.internalContainers {
             let typeContainer = receiptAttribute.internalContainers[0]
             let valueContainer = receiptAttribute.internalContainers[2]
-            let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
+            let attributeType = ReceiptAttributeType(rawValue: typeContainer.internalPayload.toUInt())
             guard let nonOptionalType = attributeType else {
                 print("skipping in app attribute")
                 continue
             }
-            let value = extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
-            receipt.setAttribute(nonOptionalType, value: value)
+            if let value = extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType) {
+                receipt.setAttribute(nonOptionalType, value: value)
+            }
         }
         return receipt
     }
 }
 
 private extension AppleReceiptFactory {
+
     func extractReceiptAttributeValue(fromContainer container: ASN1Container,
-                                      withType type: ReceiptAttributeType) -> ReceiptExtractableValueType {
+                                      withType type: ReceiptAttributeType) -> ReceiptExtractableValueType? {
         let payload = container.internalPayload
+        
         switch type {
         case .opaqueValue,
              .sha1Hash:
-            return Data(payload)
+            return payload.toData() // todo: should this be internalPayload?
         case .applicationVersion,
              .originalApplicationVersion,
              .bundleId:
             let internalContainer = containerFactory.build(fromPayload: payload)
-            return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
+            return internalContainer.internalPayload.toString()
         case .creationDate,
              .expirationDate:
             let internalContainer = containerFactory.build(fromPayload: payload)
-            return dateFormatter.date(fromBytes: internalContainer.internalPayload)!
+            return internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
         case .inApp:
             let internalContainer = containerFactory.build(fromPayload: payload)
             return inAppPurchaseFactory.build(fromContainer: internalContainer)

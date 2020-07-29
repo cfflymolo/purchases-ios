@@ -19,16 +19,11 @@ struct InAppPurchaseFactory {
         for internalContainer in container.internalContainers {
             guard internalContainer.internalContainers.count == 3 else { fatalError() }
             let typeContainer = internalContainer.internalContainers[0]
-            let versionContainer = internalContainer.internalContainers[1]
             let valueContainer = internalContainer.internalContainers[2]
 
-            guard let attributeType = InAppPurchaseAttributeType(rawValue: Array(typeContainer.internalPayload)
-                .toUInt())
-                else {
-                continue
-            }
-            let version = Array(versionContainer.internalPayload).toUInt()
-
+            guard let attributeType = InAppPurchaseAttributeType(rawValue: typeContainer.internalPayload.toUInt())
+                else { continue }
+            
             if let value = extractInAppPurchaseValue(fromContainer: valueContainer, withType: attributeType) {
                 inAppPurchase.setAttribute(attributeType, value: value)
             }
@@ -48,21 +43,20 @@ private extension InAppPurchaseFactory {
         case .quantity,
              .webOrderLineItemId,
              .productType:
-            return Int(Array(internalContainer.internalPayload).toUInt())
+            return internalContainer.internalPayload.toInt()
         case .isInIntroOfferPeriod,
              .isInTrialPeriod:
-            let boolValue = Array(internalContainer.internalPayload).toUInt() == 1
-            return boolValue
+            return internalContainer.internalPayload.toBool()
         case .productId,
              .transactionId,
              .originalTransactionId,
              .promotionalOfferIdentifier:
-            return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
+            return internalContainer.internalPayload.toString()
         case .cancellationDate,
              .expiresDate,
              .originalPurchaseDate,
              .purchaseDate:
-            return dateFormatter.date(fromBytes: internalContainer.internalPayload)!
+            return internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
         }
     }
 }

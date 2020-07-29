@@ -42,14 +42,3 @@ extension UInt8 {
         }
     }
 }
-
-extension Array where Element == UInt8 {
-    func toUInt() -> UInt {
-        var result: UInt = 0
-        for idx in 0..<(self.count) {
-            let shiftAmount = UInt((self.count) - idx - 1) * 8
-            result += UInt(self[idx]) << shiftAmount
-        }
-        return result
-    }
-}

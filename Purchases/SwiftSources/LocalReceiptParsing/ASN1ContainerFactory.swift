@@ -63,8 +63,8 @@ private extension ASN1ContainerFactory {
             return ASN1Length(value: UInt(firstByte), totalBytes: 1)
         } else {
             let totalLengthOctets = Int(firstByteValue)
-            let byteArray = Array(data.dropFirst().prefix(totalLengthOctets))
-            let lengthValue = byteArray.toUInt()
+            let lengthBytes = data.dropFirst().prefix(totalLengthOctets)
+            let lengthValue = lengthBytes.toUInt()
             return ASN1Length(value: lengthValue, totalBytes: totalLengthOctets + 1)
         }
     }
