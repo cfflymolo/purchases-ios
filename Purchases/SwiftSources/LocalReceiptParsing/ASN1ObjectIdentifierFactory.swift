@@ -5,15 +5,6 @@
 
 import Foundation
 
-enum ASN1ObjectIdentifier: String {
-    case data = "1.2.840.113549.1.7.1"
-    case signedData = "1.2.840.113549.1.7.2"
-    case envelopedData = "1.2.840.113549.1.7.3"
-    case signedAndEnvelopedData = "1.2.840.113549.1.7.4"
-    case digestedData = "1.2.840.113549.1.7.5"
-    case encryptedData = "1.2.840.113549.1.7.6"
-}
-
 class ASN1ObjectIdentifierFactory {
     func build(fromPayload payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier? {
         guard let firstByte = payload.first else { fatalError("invalid object identifier") }
