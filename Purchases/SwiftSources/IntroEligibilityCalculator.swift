@@ -11,17 +11,17 @@ import StoreKit
 
 public class IntroEligibilityCalculator: NSObject {
     private let productsManager: ProductsManager
-    private let localReceiptParser: LocalReceiptParser
+    private let receiptParser: ReceiptParser
     
     public override init() {
         self.productsManager = ProductsManager()
-        self.localReceiptParser = LocalReceiptParser()
+        self.receiptParser = ReceiptParser()
     }
     
     internal init(productsManager: ProductsManager,
-                  localReceiptParser: LocalReceiptParser) {
+                  receiptParser: ReceiptParser) {
         self.productsManager = productsManager
-        self.localReceiptParser = localReceiptParser
+        self.receiptParser = receiptParser
     }
     
     @available(iOS 12.0, macOS 10.14, macCatalyst 13.0, tvOS 12.0, watchOS 6.2, *)
@@ -36,8 +36,8 @@ public class IntroEligibilityCalculator: NSObject {
         var result: [String: Int] = candidateProductIdentifiers.reduce(into: [:]) { resultDict, productId in
             resultDict[productId] = IntroEligibilityStatus.unknown.rawValue
         }
-        
-        let purchasedProductIdsWithIntroOffers = localReceiptParser.purchasedIntroOfferProductIdentifiers(receiptData: receiptData)
+        let receipt = receiptParser.parse(from: receiptData)
+        let purchasedProductIdsWithIntroOffers = receipt.purchasedIntroOfferProductIdentifiers()
         
         let allProductIdentifiers = candidateProductIdentifiers.union(purchasedProductIdsWithIntroOffers)
         
