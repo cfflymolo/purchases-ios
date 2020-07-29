@@ -15,7 +15,20 @@ struct InAppPurchaseFactory {
     }
 
     func build(fromContainer container: ASN1Container) -> InAppPurchase {
-        let inAppPurchase = InAppPurchase()
+        var quantity: Int?
+        var productId: String?
+        var transactionId: String?
+        var originalTransactionId: String?
+        var productType: InAppPurchaseProductType?
+        var purchaseDate: Date?
+        var originalPurchaseDate: Date?
+        var expiresDate: Date?
+        var cancellationDate: Date?
+        var isInTrialPeriod: Bool?
+        var isInIntroOfferPeriod: Bool?
+        var webOrderLineItemId: Int?
+        var promotionalOfferIdentifier: String?
+
         for internalContainer in container.internalContainers {
             guard internalContainer.internalContainers.count == 3 else { fatalError() }
             let typeContainer = internalContainer.internalContainers[0]
@@ -23,40 +36,63 @@ struct InAppPurchaseFactory {
 
             guard let attributeType = InAppPurchaseAttributeType(rawValue: typeContainer.internalPayload.toUInt())
                 else { continue }
-            
-            if let value = extractInAppPurchaseValue(fromContainer: valueContainer, withType: attributeType) {
-                inAppPurchase.setAttribute(attributeType, value: value)
+
+            let internalContainer = containerFactory.build(fromPayload: valueContainer.internalPayload)
+            guard internalContainer.length.value > 0 else { continue }
+
+            switch attributeType {
+            case .quantity:
+                quantity = internalContainer.internalPayload.toInt()
+            case .webOrderLineItemId:
+                webOrderLineItemId = internalContainer.internalPayload.toInt()
+            case .productType:
+                productType = InAppPurchaseProductType(rawValue: internalContainer.internalPayload.toInt())
+            case .isInIntroOfferPeriod:
+                isInIntroOfferPeriod = internalContainer.internalPayload.toBool()
+            case .isInTrialPeriod:
+                isInTrialPeriod = internalContainer.internalPayload.toBool()
+            case .productId:
+                productId = internalContainer.internalPayload.toString()
+            case .transactionId:
+                transactionId = internalContainer.internalPayload.toString()
+            case .originalTransactionId:
+                originalTransactionId = internalContainer.internalPayload.toString()
+            case .promotionalOfferIdentifier:
+                promotionalOfferIdentifier = internalContainer.internalPayload.toString()
+            case .cancellationDate:
+                cancellationDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
+            case .expiresDate:
+                expiresDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
+            case .originalPurchaseDate:
+                originalPurchaseDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
+            case .purchaseDate:
+                purchaseDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
             }
         }
-        return inAppPurchase
-    }
-}
 
-private extension InAppPurchaseFactory {
-
-    func extractInAppPurchaseValue(fromContainer container: ASN1Container,
-                                   withType type: InAppPurchaseAttributeType) -> InAppPurchaseExtractableValueType? {
-        let internalContainer = containerFactory.build(fromPayload: container.internalPayload)
-        guard internalContainer.length.value > 0 else { return nil }
-
-        switch type {
-        case .quantity,
-             .webOrderLineItemId,
-             .productType:
-            return internalContainer.internalPayload.toInt()
-        case .isInIntroOfferPeriod,
-             .isInTrialPeriod:
-            return internalContainer.internalPayload.toBool()
-        case .productId,
-             .transactionId,
-             .originalTransactionId,
-             .promotionalOfferIdentifier:
-            return internalContainer.internalPayload.toString()
-        case .cancellationDate,
-             .expiresDate,
-             .originalPurchaseDate,
-             .purchaseDate:
-            return internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
+        guard let nonOptionalQuantity = quantity,
+            let nonOptionalProductId = productId,
+            let nonOptionalTransactionId = transactionId,
+            let nonOptionalOriginalTransactionId = originalTransactionId,
+            let nonOptionalPurchaseDate = purchaseDate,
+            let nonOptionalOriginalPurchaseDate = originalPurchaseDate,
+            let nonOptionalIsInIntroOfferPeriod = isInIntroOfferPeriod,
+            let nonOptionalWebOrderLineItemId = webOrderLineItemId else {
+            fatalError() // todo: replace with custom error
         }
+
+        return InAppPurchase(quantity: nonOptionalQuantity,
+                             productId: nonOptionalProductId,
+                             transactionId: nonOptionalTransactionId,
+                             originalTransactionId: nonOptionalOriginalTransactionId,
+                             productType: productType,
+                             purchaseDate: nonOptionalPurchaseDate,
+                             originalPurchaseDate: nonOptionalOriginalPurchaseDate,
+                             expiresDate: expiresDate,
+                             cancellationDate: cancellationDate,
+                             isInTrialPeriod: isInTrialPeriod,
+                             isInIntroOfferPeriod: nonOptionalIsInIntroOfferPeriod,
+                             webOrderLineItemId: nonOptionalWebOrderLineItemId,
+                             promotionalOfferIdentifier: promotionalOfferIdentifier)
     }
 }

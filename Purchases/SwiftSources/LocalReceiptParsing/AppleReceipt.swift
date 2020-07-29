@@ -46,8 +46,8 @@ struct AppleReceipt {
 
     func purchasedIntroOfferProductIdentifiers() -> Set<String> {
         let productIdentifiers = inAppPurchases
-            .filter { $0.isInIntroOfferPeriod == true || $0.isInTrialPeriod == true }
-            .map { $0.productId! }
+            .filter { $0.isInIntroOfferPeriod || $0.isInTrialPeriod == true }
+            .map { $0.productId }
         return Set(productIdentifiers)
     }
 
