@@ -8,10 +8,12 @@ import Foundation
 struct AppleReceiptFactory {
     private let containerFactory: ASN1ContainerFactory
     private let inAppPurchaseFactory: InAppPurchaseFactory
+    private let dateFormatter: ISO3601DateFormatter
 
     init() {
         self.containerFactory = ASN1ContainerFactory()
         self.inAppPurchaseFactory = InAppPurchaseFactory()
+        self.dateFormatter = ISO3601DateFormatter.shared
     }
 
     func build(fromASN1Container container: ASN1Container) -> AppleReceipt {
@@ -20,10 +22,8 @@ struct AppleReceiptFactory {
         let receiptContainer = containerFactory.build(fromPayload: internalContainer.internalPayload)
         for receiptAttribute in receiptContainer.internalContainers {
             let typeContainer = receiptAttribute.internalContainers[0]
-            let versionContainer = receiptAttribute.internalContainers[1]
             let valueContainer = receiptAttribute.internalContainers[2]
             let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
-            let version = Array(versionContainer.internalPayload).toUInt()
             guard let nonOptionalType = attributeType else {
                 print("skipping in app attribute")
                 continue
@@ -51,7 +51,7 @@ private extension AppleReceiptFactory {
         case .creationDate,
              .expirationDate:
             let internalContainer = containerFactory.build(fromPayload: payload)
-            return ISO3601DateFormatter.shared.date(fromBytes: internalContainer.internalPayload)!
+            return dateFormatter.date(fromBytes: internalContainer.internalPayload)!
         case .inApp:
             let internalContainer = containerFactory.build(fromPayload: payload)
             return inAppPurchaseFactory.build(fromContainer: internalContainer)

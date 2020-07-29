@@ -7,9 +7,11 @@ import Foundation
 
 struct InAppPurchaseFactory {
     private let containerFactory: ASN1ContainerFactory
+    private let dateFormatter: ISO3601DateFormatter
 
     init() {
         self.containerFactory = ASN1ContainerFactory()
+        self.dateFormatter = ISO3601DateFormatter.shared
     }
 
     func build(fromContainer container: ASN1Container) -> InAppPurchase {
@@ -60,7 +62,7 @@ private extension InAppPurchaseFactory {
              .expiresDate,
              .originalPurchaseDate,
              .purchaseDate:
-            return ISO3601DateFormatter.shared.date(fromBytes: internalContainer.internalPayload)!
+            return dateFormatter.date(fromBytes: internalContainer.internalPayload)!
         }
     }
 }
