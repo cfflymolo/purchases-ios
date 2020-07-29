@@ -17,7 +17,15 @@ struct AppleReceiptFactory {
     }
 
     func build(fromASN1Container container: ASN1Container) -> AppleReceipt {
-        let receipt = AppleReceipt()
+        var bundleId: String?
+        var applicationVersion: String?
+        var originalApplicationVersion: String?
+        var opaqueValue: Data?
+        var sha1Hash: Data?
+        var creationDate: Date?
+        var expirationDate: Date?
+        var inAppPurchases: [InAppPurchase] = []
+
         guard let internalContainer = container.internalContainers.first else { fatalError() }
         let receiptContainer = containerFactory.build(fromPayload: internalContainer.internalPayload)
         for receiptAttribute in receiptContainer.internalContainers {
@@ -25,39 +33,53 @@ struct AppleReceiptFactory {
             let valueContainer = receiptAttribute.internalContainers[2]
             let attributeType = ReceiptAttributeType(rawValue: typeContainer.internalPayload.toUInt())
             guard let nonOptionalType = attributeType else {
-                print("skipping in app attribute")
                 continue
             }
-            if let value = extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType) {
-                receipt.setAttribute(nonOptionalType, value: value)
+            let payload = valueContainer.internalPayload
+
+            switch nonOptionalType {
+            case .opaqueValue:
+                opaqueValue = payload.toData()
+            case .sha1Hash:
+                sha1Hash = payload.toData()
+            case .applicationVersion:
+                let internalContainer = containerFactory.build(fromPayload: payload)
+                applicationVersion = internalContainer.internalPayload.toString()
+            case .originalApplicationVersion:
+                let internalContainer = containerFactory.build(fromPayload: payload)
+                originalApplicationVersion = internalContainer.internalPayload.toString()
+            case .bundleId:
+                let internalContainer = containerFactory.build(fromPayload: payload)
+                bundleId = internalContainer.internalPayload.toString()
+            case .creationDate:
+                let internalContainer = containerFactory.build(fromPayload: payload)
+                creationDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
+            case .expirationDate:
+                let internalContainer = containerFactory.build(fromPayload: payload)
+                expirationDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
+            case .inApp:
+                let internalContainer = containerFactory.build(fromPayload: payload)
+                inAppPurchases.append(inAppPurchaseFactory.build(fromContainer: internalContainer))
             }
         }
-        return receipt
-    }
-}
 
-private extension AppleReceiptFactory {
-
-    func extractReceiptAttributeValue(fromContainer container: ASN1Container,
-                                      withType type: ReceiptAttributeType) -> ReceiptExtractableValueType? {
-        let payload = container.internalPayload
-        
-        switch type {
-        case .opaqueValue,
-             .sha1Hash:
-            return payload.toData() // todo: should this be internalPayload?
-        case .applicationVersion,
-             .originalApplicationVersion,
-             .bundleId:
-            let internalContainer = containerFactory.build(fromPayload: payload)
-            return internalContainer.internalPayload.toString()
-        case .creationDate,
-             .expirationDate:
-            let internalContainer = containerFactory.build(fromPayload: payload)
-            return internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
-        case .inApp:
-            let internalContainer = containerFactory.build(fromPayload: payload)
-            return inAppPurchaseFactory.build(fromContainer: internalContainer)
+        guard let nonOptionalBundleId = bundleId,
+            let nonOptionalApplicationVersion = applicationVersion,
+            let nonOptionalOriginalApplicationVersion = originalApplicationVersion,
+            let nonOptionalOpaqueValue = opaqueValue,
+            let nonOptionalSha1Hash = sha1Hash,
+            let nonOptionalCreationDate = creationDate else {
+            fatalError() // todo: replace with custom error
         }
+
+        let receipt = AppleReceipt(bundleId: nonOptionalBundleId,
+                                   applicationVersion: nonOptionalApplicationVersion,
+                                   originalApplicationVersion: nonOptionalOriginalApplicationVersion,
+                                   opaqueValue: nonOptionalOpaqueValue,
+                                   sha1Hash: nonOptionalSha1Hash,
+                                   creationDate: nonOptionalCreationDate,
+                                   expirationDate: expirationDate,
+                                   inAppPurchases: inAppPurchases)
+        return receipt
     }
 }
