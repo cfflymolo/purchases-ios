@@ -17,7 +17,7 @@
 		2D1A297624BF7B29007BE4BD /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296224BF7B29007BE4BD /* Date+Extension.swift */; };
 		2D1A297724BF7B29007BE4BD /* Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296324BF7B29007BE4BD /* Extras.swift */; };
 		2D1A297824BF7B29007BE4BD /* InAppReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296424BF7B29007BE4BD /* InAppReceipt.swift */; };
-		2D1A297924BF7B29007BE4BD /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296524BF7B29007BE4BD /* InAppPurchase.swift */; };
+		2D1A297924BF7B29007BE4BD /* TPInAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296524BF7B29007BE4BD /* TPInAppPurchase.swift */; };
 		2D1A297A24BF7B29007BE4BD /* InAppReceiptPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296624BF7B29007BE4BD /* InAppReceiptPayload.swift */; };
 		2D1A297B24BF7B29007BE4BD /* IARError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296724BF7B29007BE4BD /* IARError.swift */; };
 		2D1A297C24BF7B29007BE4BD /* PKC7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1A296824BF7B29007BE4BD /* PKC7.swift */; };
@@ -213,7 +213,7 @@
 		2D1A296224BF7B29007BE4BD /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		2D1A296324BF7B29007BE4BD /* Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extras.swift; sourceTree = "<group>"; };
 		2D1A296424BF7B29007BE4BD /* InAppReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceipt.swift; sourceTree = "<group>"; };
-		2D1A296524BF7B29007BE4BD /* InAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
+		2D1A296524BF7B29007BE4BD /* TPInAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TPInAppPurchase.swift; sourceTree = "<group>"; };
 		2D1A296624BF7B29007BE4BD /* InAppReceiptPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptPayload.swift; sourceTree = "<group>"; };
 		2D1A296724BF7B29007BE4BD /* IARError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IARError.swift; sourceTree = "<group>"; };
 		2D1A296824BF7B29007BE4BD /* PKC7.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKC7.swift; sourceTree = "<group>"; };
@@ -435,7 +435,7 @@
 				2D1A296224BF7B29007BE4BD /* Date+Extension.swift */,
 				2D1A296324BF7B29007BE4BD /* Extras.swift */,
 				2D1A296424BF7B29007BE4BD /* InAppReceipt.swift */,
-				2D1A296524BF7B29007BE4BD /* InAppPurchase.swift */,
+				2D1A296524BF7B29007BE4BD /* TPInAppPurchase.swift */,
 				2D1A296624BF7B29007BE4BD /* InAppReceiptPayload.swift */,
 				2D1A296724BF7B29007BE4BD /* IARError.swift */,
 				2D1A296824BF7B29007BE4BD /* PKC7.swift */,
@@ -1073,7 +1073,7 @@
 				2D1A298124BF7B29007BE4BD /* PKCS7Helper.swift in Sources */,
 				2D5BB46D24C8EB1C00E27537 /* ASN1Receipt.swift in Sources */,
 				37E3556DD7FB5317A43086CC /* NSDate+RCExtensions.m in Sources */,
-				2D1A297924BF7B29007BE4BD /* InAppPurchase.swift in Sources */,
+				2D1A297924BF7B29007BE4BD /* TPInAppPurchase.swift in Sources */,
 				37E35B4BDE7D7B1EFB3EE800 /* NSError+RCExtensions.m in Sources */,
 				2DF4DAED24CB3DE000391BE7 /* UInt8+Extensions.swift in Sources */,
 				2D1A297E24BF7B29007BE4BD /* ASN1Object.swift in Sources */,

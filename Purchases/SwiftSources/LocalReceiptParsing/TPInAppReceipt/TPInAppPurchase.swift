@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct InAppPurchase
+struct TPInAppPurchase
 {
     enum `Type`: Int
     {
@@ -128,7 +128,7 @@ struct InAppPurchase
     }
 }
 
-extension InAppPurchase
+extension TPInAppPurchase
 {
     /// Purchase Date representation as a 'Date' object
     var purchaseDate: Date

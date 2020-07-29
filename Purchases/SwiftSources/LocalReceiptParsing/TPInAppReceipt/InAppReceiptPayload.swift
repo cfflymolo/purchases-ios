@@ -11,7 +11,7 @@ import Foundation
 struct InAppReceiptPayload
 {
     /// In-app purchase's receipts
-    let purchases: [InAppPurchase]
+    let purchases: [TPInAppPurchase]
     
     /// The app’s bundle identifier
     let bundleIdentifier: String
@@ -42,7 +42,7 @@ struct InAppReceiptPayload
 	
     /// Initialize a `InAppReceipt` passing all values
     ///
-	init(bundleIdentifier: String, appVersion: String, originalAppVersion: String, purchases: [InAppPurchase], expirationDate: String?, bundleIdentifierData: Data, opaqueValue: Data, receiptHash: Data, creationDate: String, environment: String)
+	init(bundleIdentifier: String, appVersion: String, originalAppVersion: String, purchases: [TPInAppPurchase], expirationDate: String?, bundleIdentifierData: Data, opaqueValue: Data, receiptHash: Data, creationDate: String, environment: String)
     {
         self.bundleIdentifier = bundleIdentifier
         self.appVersion = appVersion
@@ -68,7 +68,7 @@ extension InAppReceiptPayload
         var bundleIdentifier = ""
         var appVersion = ""
         var originalAppVersion = ""
-        var purchases = [InAppPurchase]()
+        var purchases = [TPInAppPurchase]()
         var bundleIdentifierData = Data()
         var opaqueValue = Data()
         var receiptHash = Data()
@@ -93,7 +93,7 @@ extension InAppReceiptPayload
                 case .receiptHash:
                     receiptHash = value
                 case .inAppPurchaseReceipt:
-                    purchases.append(InAppPurchase(asn1Data: value))
+                    purchases.append(TPInAppPurchase(asn1Data: value))
                     break
                 case .originalAppVersion:
                     originalAppVersion = ASN1.readString(from: &value, encoding: .utf8)

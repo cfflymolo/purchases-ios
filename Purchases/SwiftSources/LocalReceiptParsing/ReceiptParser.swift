@@ -62,53 +62,68 @@ struct ReceiptParser {
 
     func extractReceipt(fromPayload payload: ArraySlice<UInt8>) {
         let outerContainer = extractASN1(withPayload: payload)
+        var receipt = AppleReceipt()
         guard let internalContainer = outerContainer.internalContainers.first else { fatalError() }
-        let inAppReceiptContainer = extractASN1(withPayload: internalContainer.internalPayload)
-        for inAppReceiptAttribute in inAppReceiptContainer.internalContainers {
-            extractInAppReceiptAttribute(inAppReceiptAttribute)
+        let receiptContainer = extractASN1(withPayload: internalContainer.internalPayload)
+        for receiptAttribute in receiptContainer.internalContainers {
+            let typeContainer = receiptAttribute.internalContainers[0]
+            let versionContainer = receiptAttribute.internalContainers[1]
+            let valueContainer = receiptAttribute.internalContainers[2]
+            let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
+            let version = Array(versionContainer.internalPayload).toUInt()
+            guard let nonOptionalType = attributeType else {
+                print("skipping in app attribute")
+                continue
+            }
+            let value = extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
+            receipt.setAttribute(nonOptionalType, value: value)
         }
     }
 
-    func extractInAppReceiptAttribute(_ container: ASN1Container) {
-        guard container.internalContainers.count == 3 else { fatalError() }
-        let typeContainer = container.internalContainers[0]
-        let versionContainer = container.internalContainers[1]
-        let valueContainer = container.internalContainers[2]
-        let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
-        let version = Array(versionContainer.internalPayload).toUInt()
-        guard let nonOptionalType = attributeType else {
-            print("skipping in app attribute")
-            return
-        }
-
-        extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
-    }
+//    func extractInAppReceiptAttribute(_ container: ASN1Container) -> ReceiptExtractableValueType? {
+//        guard container.internalContainers.count == 3 else { fatalError() }
+//        let typeContainer = container.internalContainers[0]
+//        let versionContainer = container.internalContainers[1]
+//        let valueContainer = container.internalContainers[2]
+//        let attributeType = ReceiptAttributeType(rawValue: Array(typeContainer.internalPayload).toUInt())
+//        let version = Array(versionContainer.internalPayload).toUInt()
+//        guard let nonOptionalType = attributeType else {
+//            print("skipping in app attribute")
+//            return nil
+//        }
+//
+//        return extractReceiptAttributeValue(fromContainer: valueContainer, withType: nonOptionalType)
+//    }
 
     func extractReceiptAttributeValue(fromContainer container: ASN1Container,
-                                      withType type: ReceiptAttributeType) {
+                                      withType type: ReceiptAttributeType) -> ReceiptExtractableValueType {
+        let payload = container.internalPayload
         switch type {
-        case .opaqueValue:
-            print("opaqueValue")
-        case .sha1Hash:
-            print("sha1Hash")
+        case .opaqueValue,
+             .sha1Hash:
+            return Data(payload)
         case .applicationVersion,
              .originalApplicationVersion,
              .bundleId:
-            let internalContainer = extractASN1(withPayload: container.internalPayload)
-            print(String(bytes: internalContainer.internalPayload, encoding: .utf8)!)
+            let internalContainer = extractASN1(withPayload: payload)
+            return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
         case .creationDate,
              .expirationDate:
-            let internalContainer = extractASN1(withPayload: container.internalPayload)
-            print(String(bytes: internalContainer.internalPayload, encoding: .ascii)!)
+            let internalContainer = extractASN1(withPayload: payload)
+            // todo: use only one date formatter
+            let rfc3339DateFormatter = DateFormatter()
+            rfc3339DateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
+            let dateString = String(bytes: internalContainer.internalPayload, encoding: .ascii)!
+            return rfc3339DateFormatter.date(from: dateString)!
         case .inApp:
-            let internalContainer = extractASN1(withPayload: container.internalPayload)
-            print(extractInAppPurchase(fromContainer: internalContainer))
+            let internalContainer = extractASN1(withPayload: payload)
+            return extractInAppPurchase(fromContainer: internalContainer)
         }
     }
 
-    func extractInAppPurchase(fromContainer container: ASN1Container) {
+    func extractInAppPurchase(fromContainer container: ASN1Container) -> InAppPurchase {
+        let inAppPurchase = InAppPurchase()
         for internalContainer in container.internalContainers {
-
             guard internalContainer.internalContainers.count == 3 else { fatalError() }
             let typeContainer = internalContainer.internalContainers[0]
             let versionContainer = internalContainer.internalContainers[1]
@@ -121,33 +136,38 @@ struct ReceiptParser {
             }
             let version = Array(versionContainer.internalPayload).toUInt()
 
-            let value = extractInAppPurchaseValue(fromContainer: valueContainer, withType: attributeType)
-            print("\(attributeType): \(value)")
+            if let value = extractInAppPurchaseValue(fromContainer: valueContainer, withType: attributeType) {
+                inAppPurchase.setAttribute(attributeType, value: value)
+            }
         }
+        return inAppPurchase
     }
 
     func extractInAppPurchaseValue(fromContainer container: ASN1Container,
-                                   withType type: InAppPurchaseAttributeType) -> String {
+                                   withType type: InAppPurchaseAttributeType) -> InAppPurchaseExtractableValueType? {
+        let internalContainer = extractASN1(withPayload: container.internalPayload)
+        guard internalContainer.length.value > 0 else { return nil }
+        
         switch type {
         case .quantity,
              .webOrderLineItemId:
-            let internalContainer = extractASN1(withPayload: container.internalPayload)
-            return "\(Array(internalContainer.internalPayload).toUInt())"
+            return Int(Array(internalContainer.internalPayload).toUInt())
         case .isInIntroOfferPeriod:
-            let internalContainer = extractASN1(withPayload: container.internalPayload)
             let boolValue = Array(internalContainer.internalPayload).toUInt() == 1
-            return "\(boolValue)"
+            return boolValue
         case .productId,
              .transactionId,
              .originalTransactionId:
-            let internalContainer = extractASN1(withPayload: container.internalPayload)
             return String(bytes: internalContainer.internalPayload, encoding: .utf8)!
         case .cancellationDate,
              .expiresDate,
              .originalPurchaseDate,
              .purchaseDate:
-            let internalContainer = extractASN1(withPayload: container.internalPayload)
-            return String(bytes: internalContainer.internalPayload, encoding: .ascii)!
+            // todo: use only one date formatter
+            let rfc3339DateFormatter = DateFormatter()
+            rfc3339DateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
+            let dateString = String(bytes: internalContainer.internalPayload, encoding: .ascii)!
+            return rfc3339DateFormatter.date(from: dateString)!
         }
     }
 

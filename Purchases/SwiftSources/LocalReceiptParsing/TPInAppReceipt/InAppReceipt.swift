@@ -102,20 +102,20 @@ extension InAppReceipt
     }
     
     /// In-app purchase's receipts
-    var purchases: [InAppPurchase]
+    var purchases: [TPInAppPurchase]
     {
         return payload.purchases
     }
     
     /// Returns all auto renewable `InAppPurchase`s,
-    var autoRenewablePurchases: [InAppPurchase]
+    var autoRenewablePurchases: [TPInAppPurchase]
     {
         return purchases.filter({ $0.isRenewableSubscription })
     }
     
     /// Returns all ACTIVE auto renewable `InAppPurchase`s,
     ///
-    var activeAutoRenewableSubscriptionPurchases: [InAppPurchase]
+    var activeAutoRenewableSubscriptionPurchases: [TPInAppPurchase]
     {
         return purchases.filter({ $0.isRenewableSubscription && $0.isActiveAutoRenewableSubscription(forDate: Date()) })
         
@@ -181,9 +181,9 @@ extension InAppReceipt
     /// - parameter productIdentifier: Product name
     /// - parameter sort: Sorting block
     func purchases(ofProductIdentifier productIdentifier: String,
-                          sortedBy sort: ((InAppPurchase, InAppPurchase) -> Bool)? = nil) -> [InAppPurchase]
+                          sortedBy sort: ((TPInAppPurchase, TPInAppPurchase) -> Bool)? = nil) -> [TPInAppPurchase]
     {
-        let filtered: [InAppPurchase] = purchases.filter({
+        let filtered: [TPInAppPurchase] = purchases.filter({
             return $0.productIdentifier == productIdentifier
         })
         
@@ -205,7 +205,7 @@ extension InAppReceipt
     /// `nil` otherwise
     ///
     /// - parameter productIdentifier: Product name
-    func activeAutoRenewableSubscriptionPurchases(ofProductIdentifier productIdentifier: String, forDate date: Date) -> InAppPurchase?
+    func activeAutoRenewableSubscriptionPurchases(ofProductIdentifier productIdentifier: String, forDate date: Date) -> TPInAppPurchase?
     {
         let filtered = purchases(ofProductIdentifier: productIdentifier)
         
@@ -225,10 +225,10 @@ extension InAppReceipt
     /// `nil` otherwise
     ///
     /// - parameter productIdentifier: Product name
-    func lastAutoRenewableSubscriptionPurchase(ofProductIdentifier productIdentifier: String) -> InAppPurchase?
+    func lastAutoRenewableSubscriptionPurchase(ofProductIdentifier productIdentifier: String) -> TPInAppPurchase?
     {
         
-        var purchase: InAppPurchase? = nil
+        var purchase: TPInAppPurchase? = nil
         let filtered = purchases(ofProductIdentifier: productIdentifier)
         
         var lastInterval: TimeInterval = 0
