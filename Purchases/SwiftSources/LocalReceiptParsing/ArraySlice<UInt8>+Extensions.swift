@@ -36,4 +36,3 @@ extension ArraySlice where Element == UInt8 {
         return Data(self)
     }
 }
-

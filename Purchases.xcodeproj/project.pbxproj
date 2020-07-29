@@ -132,7 +132,7 @@
 		37E35AF213F2F79CB067FDC2 /* InMemoryCachedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E35E3250FBBB03D92E06EC /* InMemoryCachedObjectTests.swift */; };
 		37E35B1F34D1624509012749 /* MockSubscriberAttributesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351D48260D9DC8B1EE360 /* MockSubscriberAttributesManager.swift */; };
 		37E35B4BDE7D7B1EFB3EE800 /* NSError+RCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E35088AB7C4F7A242D3ED5 /* NSError+RCExtensions.m */; };
-		37E35B6280AD02770E8D86DE /* ASN1DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E3546D9167C336E9C8DB9E /* ASN1DataConverter.swift */; };
+		37E35B6280AD02770E8D86DE /* ArraySlice<UInt8>+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E3546D9167C336E9C8DB9E /* ArraySlice<UInt8>+Extensions.swift */; };
 		37E35B83B53BEBE1E87553CA /* ASN1ObjectIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E35BF04407367BF908F27E /* ASN1ObjectIdentifier.swift */; };
 		37E35BDDC331C3A5FF72CFFF /* RCStoreKitRequestFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E351CDC94FE0A49A3DAAB3 /* RCStoreKitRequestFetcher.m */; };
 		37E35BE05E2A8BB2BD310CB0 /* RCHTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E356C39D29EB6C8EC2D6BD /* RCHTTPClient.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -288,7 +288,7 @@
 		37E353AF2CAD3CEDE6D9B368 /* NSError+RCExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSError+RCExtensionsTests.swift"; sourceTree = "<group>"; };
 		37E353CBE9CF2572A72A347F /* HTTPClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClientTests.swift; sourceTree = "<group>"; };
 		37E35467BE5C5AEE23FD2F28 /* ASN1Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1Container.swift; sourceTree = "<group>"; };
-		37E3546D9167C336E9C8DB9E /* ASN1DataConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1DataConverter.swift; sourceTree = "<group>"; };
+		37E3546D9167C336E9C8DB9E /* ArraySlice<UInt8>+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArraySlice<UInt8>+Extensions.swift"; sourceTree = "<group>"; };
 		37E3548189DA008320B3FC98 /* ProductInfoExtractorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductInfoExtractorTests.swift; sourceTree = "<group>"; };
 		37E354902741920FC5AE69A5 /* RCEntitlementInfos+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCEntitlementInfos+Protected.h"; sourceTree = "<group>"; };
 		37E354AF5D4E5FB2787B40DB /* IdentityManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityManagerTests.swift; sourceTree = "<group>"; };
@@ -403,7 +403,7 @@
 				37E35187B4552038B1664D42 /* AppleReceiptFactory.swift */,
 				37E357FED2DE87DFF2CEF33B /* ISO3601DateFormatter.swift */,
 				37E35BF04407367BF908F27E /* ASN1ObjectIdentifier.swift */,
-				37E3546D9167C336E9C8DB9E /* ASN1DataConverter.swift */,
+				37E3546D9167C336E9C8DB9E /* ArraySlice<UInt8>+Extensions.swift */,
 			);
 			path = LocalReceiptParsing;
 			sourceTree = "<group>";
@@ -1037,7 +1037,7 @@
 				37E35F8716CFAA62D5ACF5A7 /* AppleReceiptFactory.swift in Sources */,
 				37E354D57EEA141835198BE0 /* ISO3601DateFormatter.swift in Sources */,
 				37E35B83B53BEBE1E87553CA /* ASN1ObjectIdentifier.swift in Sources */,
-				37E35B6280AD02770E8D86DE /* ASN1DataConverter.swift in Sources */,
+				37E35B6280AD02770E8D86DE /* ArraySlice<UInt8>+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
