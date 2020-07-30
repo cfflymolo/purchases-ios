@@ -25,15 +25,6 @@ enum ReceiptAttributeType: UInt {
          expirationDate = 21
 }
 
-protocol ReceiptExtractableValueType {}
-
-extension String: ReceiptExtractableValueType {}
-extension Date: ReceiptExtractableValueType {}
-extension Int: ReceiptExtractableValueType {}
-extension Bool: ReceiptExtractableValueType {}
-extension Data: ReceiptExtractableValueType {}
-extension InAppPurchase: ReceiptExtractableValueType {}
-
 struct AppleReceipt {
     let bundleId: String
     let applicationVersion: String

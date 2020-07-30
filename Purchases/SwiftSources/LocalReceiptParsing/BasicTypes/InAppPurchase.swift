@@ -29,14 +29,6 @@ enum InAppPurchaseProductType: Int {
          autoRenewableSubscription
 }
 
-protocol InAppPurchaseExtractableValueType {}
-
-extension String: InAppPurchaseExtractableValueType {}
-extension Date: InAppPurchaseExtractableValueType {}
-extension Int: InAppPurchaseExtractableValueType {}
-extension Bool: InAppPurchaseExtractableValueType {}
-extension Data: InAppPurchaseExtractableValueType {}
-
 struct InAppPurchase {
     let quantity: Int
     let productId: String
@@ -52,7 +44,7 @@ struct InAppPurchase {
     let webOrderLineItemId: Int
     let promotionalOfferIdentifier: String?
 
-    var asDict: [String: InAppPurchaseExtractableValueType] {
+    var asDict: [String: Any] {
         return [
             "quantity": quantity,
             "productId": productId,
