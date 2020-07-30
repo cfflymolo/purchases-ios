@@ -16,7 +16,7 @@ struct AppleReceiptFactory {
         self.dateFormatter = ISO3601DateFormatter.shared
     }
 
-    func build(fromASN1Container container: ASN1Container) -> AppleReceipt {
+    func build(fromASN1Container container: ASN1Container) throws -> AppleReceipt {
         var bundleId: String?
         var applicationVersion: String?
         var originalApplicationVersion: String?
@@ -27,7 +27,7 @@ struct AppleReceiptFactory {
         var inAppPurchases: [InAppPurchase] = []
 
         guard let internalContainer = container.internalContainers.first else { fatalError() }
-        let receiptContainer = containerFactory.build(fromPayload: internalContainer.internalPayload)
+        let receiptContainer = try containerFactory.build(fromPayload: internalContainer.internalPayload)
         for receiptAttribute in receiptContainer.internalContainers {
             let typeContainer = receiptAttribute.internalContainers[0]
             let valueContainer = receiptAttribute.internalContainers[2]
@@ -43,23 +43,23 @@ struct AppleReceiptFactory {
             case .sha1Hash:
                 sha1Hash = payload.toData()
             case .applicationVersion:
-                let internalContainer = containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerFactory.build(fromPayload: payload)
                 applicationVersion = internalContainer.internalPayload.toString()
             case .originalApplicationVersion:
-                let internalContainer = containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerFactory.build(fromPayload: payload)
                 originalApplicationVersion = internalContainer.internalPayload.toString()
             case .bundleId:
-                let internalContainer = containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerFactory.build(fromPayload: payload)
                 bundleId = internalContainer.internalPayload.toString()
             case .creationDate:
-                let internalContainer = containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerFactory.build(fromPayload: payload)
                 creationDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
             case .expirationDate:
-                let internalContainer = containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerFactory.build(fromPayload: payload)
                 expirationDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
             case .inApp:
-                let internalContainer = containerFactory.build(fromPayload: payload)
-                inAppPurchases.append(inAppPurchaseFactory.build(fromContainer: internalContainer))
+                let internalContainer = try containerFactory.build(fromPayload: payload)
+                inAppPurchases.append(try inAppPurchaseFactory.build(fromContainer: internalContainer))
             }
         }
 
@@ -69,7 +69,7 @@ struct AppleReceiptFactory {
             let nonOptionalOpaqueValue = opaqueValue,
             let nonOptionalSha1Hash = sha1Hash,
             let nonOptionalCreationDate = creationDate else {
-            fatalError() // todo: replace with custom error
+            throw ReceiptReadingError.receiptParsingError
         }
 
         let receipt = AppleReceipt(bundleId: nonOptionalBundleId,

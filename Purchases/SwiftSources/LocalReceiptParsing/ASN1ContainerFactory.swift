@@ -7,20 +7,24 @@ import Foundation
 
 struct ASN1ContainerFactory {
 
-    func build(fromPayload payload: ArraySlice<UInt8>) -> ASN1Container {
+    func build(fromPayload payload: ArraySlice<UInt8>) throws -> ASN1Container {
         guard payload.count >= 2,
-            let firstByte = payload.first else { fatalError("data format invalid") }
-        let containerClass = extractClass(byte: firstByte)
-        let encodingType = extractEncodingType(byte: firstByte)
-        let containerType = extractType(byte: firstByte)
-        let length = extractLength(data: payload.dropFirst())
+              let firstByte = payload.first else { throw ReceiptReadingError.asn1ParsingError }
+        let containerClass = try extractClass(byte: firstByte)
+        let encodingType = try extractEncodingType(byte: firstByte)
+        let containerType = try extractType(byte: firstByte)
+        let length = try extractLength(data: payload.dropFirst())
         let identifierTotalBytes = 1
-        let internalPayload = payload.dropFirst(identifierTotalBytes + length.totalBytes).prefix(Int(length.value))
+        let metadataBytes = identifierTotalBytes + length.totalBytes
+        
+        guard payload.count - metadataBytes >= Int(length.value) else { throw ReceiptReadingError.asn1ParsingError }
+        
+        let internalPayload = payload.dropFirst(metadataBytes).prefix(Int(length.value))
         var internalContainers: [ASN1Container] = []
         if encodingType == .constructed {
             var currentPayload = internalPayload
             while (currentPayload.count > 0) {
-                let internalContainer = build(fromPayload: currentPayload)
+                let internalContainer = try build(fromPayload: currentPayload)
                 internalContainers.append(internalContainer)
                 currentPayload = currentPayload.dropFirst(internalContainer.totalBytes)
             }
@@ -36,23 +40,28 @@ struct ASN1ContainerFactory {
 
 private extension ASN1ContainerFactory {
 
-    func extractClass(byte: UInt8) -> ASN1Class {
+    func extractClass(byte: UInt8) throws -> ASN1Class {
         let firstTwoBits = byte.valueInRange(from: 0, to: 1)
-        return ASN1Class(rawValue: firstTwoBits)!
+        guard let asn1Class = ASN1Class(rawValue: firstTwoBits) else { throw ReceiptReadingError.asn1ParsingError }
+        return asn1Class
     }
 
-    func extractEncodingType(byte: UInt8) -> ASN1EncodingType {
+    func extractEncodingType(byte: UInt8) throws -> ASN1EncodingType {
         let thirdBit = byte.bitAtIndex(2)
-        return ASN1EncodingType(rawValue: thirdBit)!
+        guard let encodingType = ASN1EncodingType(rawValue: thirdBit) else {
+            throw ReceiptReadingError.asn1ParsingError
+        }
+        return encodingType
     }
 
-    func extractType(byte: UInt8) -> ASN1Type {
+    func extractType(byte: UInt8) throws -> ASN1Type {
         let lastFiveBits = byte.valueInRange(from: 3, to: 7)
-        return ASN1Type(rawValue: lastFiveBits)!
+        guard let asn1Type = ASN1Type(rawValue: lastFiveBits) else { throw ReceiptReadingError.asn1ParsingError }
+        return asn1Type
     }
 
-    func extractLength(data: ArraySlice<UInt8>) -> ASN1Length {
-        guard let firstByte = data.first else { fatalError("data format invalid") }
+    func extractLength(data: ArraySlice<UInt8>) throws -> ASN1Length {
+        guard let firstByte = data.first else { throw ReceiptReadingError.asn1ParsingError }
 
         let lengthBit = firstByte.bitAtIndex(0)
         let isShortLength = lengthBit == 0

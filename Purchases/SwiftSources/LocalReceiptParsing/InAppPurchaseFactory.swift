@@ -14,7 +14,7 @@ struct InAppPurchaseFactory {
         self.dateFormatter = ISO3601DateFormatter.shared
     }
 
-    func build(fromContainer container: ASN1Container) -> InAppPurchase {
+    func build(fromContainer container: ASN1Container) throws -> InAppPurchase {
         var quantity: Int?
         var productId: String?
         var transactionId: String?
@@ -37,7 +37,7 @@ struct InAppPurchaseFactory {
             guard let attributeType = InAppPurchaseAttributeType(rawValue: typeContainer.internalPayload.toUInt())
                 else { continue }
 
-            let internalContainer = containerFactory.build(fromPayload: valueContainer.internalPayload)
+            let internalContainer = try containerFactory.build(fromPayload: valueContainer.internalPayload)
             guard internalContainer.length.value > 0 else { continue }
 
             switch attributeType {
@@ -78,7 +78,7 @@ struct InAppPurchaseFactory {
             let nonOptionalOriginalPurchaseDate = originalPurchaseDate,
             let nonOptionalIsInIntroOfferPeriod = isInIntroOfferPeriod,
             let nonOptionalWebOrderLineItemId = webOrderLineItemId else {
-            fatalError() // todo: replace with custom error
+            throw ReceiptReadingError.inAppParsingError
         }
 
         return InAppPurchase(quantity: nonOptionalQuantity,

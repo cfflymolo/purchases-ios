@@ -36,20 +36,26 @@ public class IntroEligibilityCalculator: NSObject {
         var result: [String: Int] = candidateProductIdentifiers.reduce(into: [:]) { resultDict, productId in
             resultDict[productId] = IntroEligibilityStatus.unknown.rawValue
         }
-        let receipt = receiptParser.parse(from: receiptData)
-        let purchasedProductIdsWithIntroOffers = receipt.purchasedIntroOfferProductIdentifiers()
-        
-        let allProductIdentifiers = candidateProductIdentifiers.union(purchasedProductIdsWithIntroOffers)
-        
-        productsManager.products(withIdentifiers: allProductIdentifiers) { allProducts in
-            let purchasedProductsWithIntroOffers = allProducts.filter { purchasedProductIdsWithIntroOffers.contains($0.productIdentifier) }
-            let candidateProducts = allProducts.filter { candidateProductIdentifiers.contains($0.productIdentifier) }
+        do {
+            let receipt = try receiptParser.parse(from: receiptData)
+            let purchasedProductIdsWithIntroOffers = receipt.purchasedIntroOfferProductIdentifiers()
             
-            let eligibility: [String: Int] = self.checkIntroEligibility(candidateProducts: candidateProducts,
-                                                                        purchasedProductsWithIntroOffers: purchasedProductsWithIntroOffers)
-            result.merge(eligibility) { (_, new) in new }
+            let allProductIdentifiers = candidateProductIdentifiers.union(purchasedProductIdsWithIntroOffers)
             
-            completion(result, nil)
+            productsManager.products(withIdentifiers: allProductIdentifiers) { allProducts in
+                let purchasedProductsWithIntroOffers = allProducts.filter { purchasedProductIdsWithIntroOffers.contains($0.productIdentifier) }
+                let candidateProducts = allProducts.filter { candidateProductIdentifiers.contains($0.productIdentifier) }
+                
+                let eligibility: [String: Int] = self.checkIntroEligibility(candidateProducts: candidateProducts,
+                                                                            purchasedProductsWithIntroOffers: purchasedProductsWithIntroOffers)
+                result.merge(eligibility) { (_, new) in new }
+                
+                completion(result, nil)
+            }
+        }
+        catch let error {
+            completion([:], error)
+            return
         }
     }
 }
