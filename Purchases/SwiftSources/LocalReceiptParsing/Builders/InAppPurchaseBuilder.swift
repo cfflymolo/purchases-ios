@@ -6,11 +6,11 @@
 import Foundation
 
 struct InAppPurchaseFactory {
-    private let containerFactory: ASN1ContainerFactory
+    private let containerFactory: ASN1ContainerBuilder
     private let dateFormatter: ISO3601DateFormatter
 
     init() {
-        self.containerFactory = ASN1ContainerFactory()
+        self.containerFactory = ASN1ContainerBuilder()
         self.dateFormatter = ISO3601DateFormatter.shared
     }
 
