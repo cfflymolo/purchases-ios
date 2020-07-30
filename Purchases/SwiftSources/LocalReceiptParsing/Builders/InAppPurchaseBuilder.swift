@@ -5,12 +5,12 @@
 
 import Foundation
 
-struct InAppPurchaseFactory {
-    private let containerFactory: ASN1ContainerBuilder
+struct InAppPurchaseBuilder {
+    private let containerBuilder: ASN1ContainerBuilder
     private let dateFormatter: ISO3601DateFormatter
 
     init() {
-        self.containerFactory = ASN1ContainerBuilder()
+        self.containerBuilder = ASN1ContainerBuilder()
         self.dateFormatter = ISO3601DateFormatter.shared
     }
 
@@ -37,7 +37,7 @@ struct InAppPurchaseFactory {
             guard let attributeType = InAppPurchaseAttributeType(rawValue: typeContainer.internalPayload.toUInt())
                 else { continue }
 
-            let internalContainer = try containerFactory.build(fromPayload: valueContainer.internalPayload)
+            let internalContainer = try containerBuilder.build(fromPayload: valueContainer.internalPayload)
             guard internalContainer.length.value > 0 else { continue }
 
             switch attributeType {

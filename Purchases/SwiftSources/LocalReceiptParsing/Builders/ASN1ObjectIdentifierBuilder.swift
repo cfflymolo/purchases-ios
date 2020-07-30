@@ -5,7 +5,7 @@
 
 import Foundation
 
-class ASN1ObjectIdentifierFactory {
+class ASN1ObjectIdentifierBuilder {
     func build(fromPayload payload: ArraySlice<UInt8>) -> ASN1ObjectIdentifier? {
         guard let firstByte = payload.first else { fatalError("invalid object identifier") }
 

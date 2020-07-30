@@ -9,24 +9,24 @@
 import Foundation
 
 struct ReceiptParser {
-    private let objectIdentifierParser: ASN1ObjectIdentifierFactory
-    private let containerFactory: ASN1ContainerFactory
-    private let receiptFactory: AppleReceiptFactory
+    private let objectIdentifierParser: ASN1ObjectIdentifierBuilder
+    private let containerBuilder: ASN1ContainerBuilder
+    private let receiptBuilder: AppleReceiptBuilder
 
     init() {
-        self.objectIdentifierParser = ASN1ObjectIdentifierFactory()
-        self.containerFactory = ASN1ContainerFactory()
-        self.receiptFactory = AppleReceiptFactory()
+        self.objectIdentifierParser = ASN1ObjectIdentifierBuilder()
+        self.containerBuilder = ASN1ContainerBuilder()
+        self.receiptBuilder = AppleReceiptBuilder()
     }
 
     func parse(from data: Data) throws -> AppleReceipt {
         let intData = [UInt8](data)
 
-        let asn1Container = try containerFactory.build(fromPayload: ArraySlice(intData))
+        let asn1Container = try containerBuilder.build(fromPayload: ArraySlice(intData))
         guard let receiptASN1Container = try findASN1Container(withObjectId: .data, inContainer: asn1Container) else {
             throw ReceiptReadingError.dataObjectIdentifierMissing
         }
-        let receipt = try receiptFactory.build(fromASN1Container: receiptASN1Container)
+        let receipt = try receiptBuilder.build(fromASN1Container: receiptASN1Container)
         return receipt
     }
 }
@@ -41,7 +41,7 @@ private extension ReceiptParser {
                 if internalContainer.containerType == .objectIdentifier {
                     let objectIdentifier = objectIdentifierParser.build(fromPayload: internalContainer.internalPayload)
                     if objectIdentifier == objectId {
-                        return try containerFactory.build(fromPayload: currentPayload)
+                        return try containerBuilder.build(fromPayload: currentPayload)
                     }
                 } else {
                     let receipt = try findASN1Container(withObjectId: objectId, inContainer: internalContainer)

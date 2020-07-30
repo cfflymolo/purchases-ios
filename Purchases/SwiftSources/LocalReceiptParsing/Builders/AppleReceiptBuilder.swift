@@ -5,14 +5,14 @@
 
 import Foundation
 
-struct AppleReceiptFactory {
-    private let containerFactory: ASN1ContainerFactory
-    private let inAppPurchaseFactory: InAppPurchaseFactory
+struct AppleReceiptBuilder {
+    private let containerBuilder: ASN1ContainerBuilder
+    private let inAppPurchaseBuilder: InAppPurchaseBuilder
     private let dateFormatter: ISO3601DateFormatter
 
     init() {
-        self.containerFactory = ASN1ContainerFactory()
-        self.inAppPurchaseFactory = InAppPurchaseFactory()
+        self.containerBuilder = ASN1ContainerBuilder()
+        self.inAppPurchaseBuilder = InAppPurchaseBuilder()
         self.dateFormatter = ISO3601DateFormatter.shared
     }
 
@@ -27,7 +27,7 @@ struct AppleReceiptFactory {
         var inAppPurchases: [InAppPurchase] = []
 
         guard let internalContainer = container.internalContainers.first else { fatalError() }
-        let receiptContainer = try containerFactory.build(fromPayload: internalContainer.internalPayload)
+        let receiptContainer = try containerBuilder.build(fromPayload: internalContainer.internalPayload)
         for receiptAttribute in receiptContainer.internalContainers {
             let typeContainer = receiptAttribute.internalContainers[0]
             let valueContainer = receiptAttribute.internalContainers[2]
@@ -43,23 +43,23 @@ struct AppleReceiptFactory {
             case .sha1Hash:
                 sha1Hash = payload.toData()
             case .applicationVersion:
-                let internalContainer = try containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerBuilder.build(fromPayload: payload)
                 applicationVersion = internalContainer.internalPayload.toString()
             case .originalApplicationVersion:
-                let internalContainer = try containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerBuilder.build(fromPayload: payload)
                 originalApplicationVersion = internalContainer.internalPayload.toString()
             case .bundleId:
-                let internalContainer = try containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerBuilder.build(fromPayload: payload)
                 bundleId = internalContainer.internalPayload.toString()
             case .creationDate:
-                let internalContainer = try containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerBuilder.build(fromPayload: payload)
                 creationDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
             case .expirationDate:
-                let internalContainer = try containerFactory.build(fromPayload: payload)
+                let internalContainer = try containerBuilder.build(fromPayload: payload)
                 expirationDate = internalContainer.internalPayload.toDate(dateFormatter: dateFormatter)
             case .inApp:
-                let internalContainer = try containerFactory.build(fromPayload: payload)
-                inAppPurchases.append(try inAppPurchaseFactory.build(fromContainer: internalContainer))
+                let internalContainer = try containerBuilder.build(fromPayload: payload)
+                inAppPurchases.append(try inAppPurchaseBuilder.build(fromContainer: internalContainer))
             }
         }
 

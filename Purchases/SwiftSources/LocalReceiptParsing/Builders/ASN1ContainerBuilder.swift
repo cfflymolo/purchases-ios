@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct ASN1ContainerFactory {
+struct ASN1ContainerBuilder {
 
     func build(fromPayload payload: ArraySlice<UInt8>) throws -> ASN1Container {
         guard payload.count >= 2,
@@ -38,7 +38,7 @@ struct ASN1ContainerFactory {
     }
 }
 
-private extension ASN1ContainerFactory {
+private extension ASN1ContainerBuilder {
 
     func extractClass(byte: UInt8) throws -> ASN1Class {
         let firstTwoBits = byte.valueInRange(from: 0, to: 1)
