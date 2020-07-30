@@ -395,7 +395,7 @@
 				2D8F622224D30F9D00F993AA /* ReceiptParsingError.swift */,
 				37E35FCF87558ACB498521F1 /* BasicTypes */,
 				37E355596456B3DFA01EF081 /* Builders */,
-				37E35556F2D7B8B28B169C77 /* Utilities */,
+				37E35556F2D7B8B28B169C77 /* DataConverters */,
 			);
 			path = LocalReceiptParsing;
 			sourceTree = "<group>";
@@ -679,14 +679,14 @@
 			path = Purchasing;
 			sourceTree = "<group>";
 		};
-		37E35556F2D7B8B28B169C77 /* Utilities */ = {
+		37E35556F2D7B8B28B169C77 /* DataConverters */ = {
 			isa = PBXGroup;
 			children = (
 				37E35408E083ECE8BD4D670C /* ArraySlice<UInt8>+Extensions.swift */,
 				37E35F419D9D56D79369D690 /* ISO3601DateFormatter.swift */,
 				37E3572FE503DFCEC4CCAD54 /* UInt8+Extensions.swift */,
 			);
-			path = Utilities;
+			path = DataConverters;
 			sourceTree = "<group>";
 		};
 		37E355596456B3DFA01EF081 /* Builders */ = {
